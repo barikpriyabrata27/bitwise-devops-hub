@@ -34,6 +34,19 @@ runs it, spread as 2 pods per worker node.
    control-plane's port mappings if configured, otherwise use
    `kubectl port-forward svc/python-app 5000:5000`).
 
+## Pausing/resuming the cluster (save resources between test sessions)
+
+The kind cluster nodes are just Docker containers. When you're done testing:
+
+```bash
+bash scripts/stop-cluster.sh   # docker stop the 3 node containers
+bash scripts/start-cluster.sh  # docker start them, wait for Ready, show pods
+```
+
+This preserves the cluster, deployed manifests, and loaded images — no
+need to recreate anything. Full teardown (`kind delete cluster --name
+docker-k8s-cicd`) is only needed if you want to remove it entirely.
+
 ## CI/CD flow
 
 1. Push to `main` → **CI** builds the image and pushes
