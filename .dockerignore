@@ -1,0 +1,7 @@
+.git
+.github
+k8s
+kind-config.yaml
+README.md
+__pycache__
+*.pyc
