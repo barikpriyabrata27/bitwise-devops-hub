@@ -1,0 +1,80 @@
+name: Patch Local Kubernetes Cluster
+
+# This workflow changes cluster state only. It does not build, load, or deploy
+# the application image and does not apply files from k8s/.
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Cluster operation to perform
+        required: true
+        default: reconcile-worker-labels
+        type: choice
+        options:
+          - reconcile-worker-labels
+          - cordon-worker
+          - uncordon-worker
+          - verify
+      node:
+        description: Worker node name for cordon or uncordon; ignored otherwise
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  CLUSTER_NAME: docker-k8s-cicd
+
+jobs:
+  patch-cluster:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch and verify cluster
+        shell: bash
+        env:
+          OPERATION: ${{ inputs.operation }}
+          TARGET_NODE: ${{ inputs.node }}
+        run: |
+          set -Eeuo pipefail
+
+          kubectl config use-context "kind-${CLUSTER_NAME}"
+          kubectl wait --for=condition=Ready nodes --all --timeout=120s
+
+          case "${OPERATION}" in
+            reconcile-worker-labels)
+              echo "Ensuring worker nodes have the worker role label."
+              mapfile -t worker_nodes < <(kubectl get nodes -l '!node-role.kubernetes.io/control-plane' -o name)
+              if [[ "${#worker_nodes[@]}" -eq 0 ]]; then
+                echo "No worker nodes found."
+                exit 1
+              fi
+              for node in "${worker_nodes[@]}"; do
+                kubectl label "${node}" node-role.kubernetes.io/worker=true --overwrite
+              done
+              ;;
+            cordon-worker)
+              [[ -n "${TARGET_NODE}" ]] || { echo "The node input is required."; exit 1; }
+              kubectl get node "${TARGET_NODE}" -l '!node-role.kubernetes.io/control-plane' >/dev/null
+              kubectl cordon "${TARGET_NODE}"
+              ;;
+            uncordon-worker)
+              [[ -n "${TARGET_NODE}" ]] || { echo "The node input is required."; exit 1; }
+              kubectl get node "${TARGET_NODE}" -l '!node-role.kubernetes.io/control-plane' >/dev/null
+              kubectl uncordon "${TARGET_NODE}"
+              ;;
+            verify)
+              echo "Verification only; no cluster changes will be made."
+              ;;
+            *)
+              echo "Unsupported operation: ${OPERATION}"
+              exit 1
+              ;;
+          esac
+
+          echo "Cluster state after operation:"
+          kubectl get nodes -o wide
+          kubectl get nodes --show-labels

@@ -21,6 +21,10 @@ runs it, spread as 2 pods per worker node.
 - `k8s/service.yaml` – NodePort service exposing the app on port `30080`.
 - `scripts/setup-kind-cluster.sh` – one-shot script to create the cluster,
   label the worker nodes, and do an initial deploy.
+- [Repository diagrams](docs/diagrams.md) – architecture, CI/CD, Kubernetes,
+  runtime, image build, rollout, and cluster lifecycle diagrams.
+- [Extra repository and operations guide](docs/README_Extra.md) – repository
+  details, diagram explanations, Kubernetes options, and cluster patching.
 
 ## One-time local setup
 
