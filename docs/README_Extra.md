@@ -111,6 +111,29 @@ The diagrams in [diagrams.md](diagrams.md) cover these views:
 | Deployment rollout | Image loading and application rollout sequence |
 | Cluster lifecycle | Create, start, stop, and delete states for kind |
 
+## Visiting the Interview Lab
+
+The interactive quiz is [interview.html](interview.html), but GitHub's source
+viewer displays HTML rather than executing it. To make it available to visitors,
+enable GitHub Pages in **Settings → Pages** with:
+
+- **Source:** Deploy from a branch
+- **Branch:** `main`
+- **Folder:** `/docs`
+
+After Pages finishes publishing, visitors can open:
+
+`https://barikpriyabrata27.github.io/docker-k8s-cicd/interview.html`
+
+For local testing, run this from the repository root:
+
+```bash
+python -m http.server 8000 --directory docs
+```
+
+Then open `http://localhost:8000/interview.html`. A web server is required
+because the quiz fetches `interview-questions.json` at runtime.
+
 ## Kubernetes Alternatives
 
 The repository currently uses kind because it is lightweight and can create a repeatable multi-node cluster from Docker containers.

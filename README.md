@@ -28,6 +28,19 @@ runs it, spread as 2 pods per worker node.
 - [Interactive Kubernetes and CI/CD interview lab](docs/interview.html) –
   100-question practice and timed interview quiz with rotating attempts.
 
+### Opening the interview lab
+
+To make the quiz available to visitors, enable GitHub Pages in the repository:
+
+1. Open **Settings → Pages**.
+2. Under **Build and deployment**, choose **Deploy from a branch**.
+3. Select the `main` branch and the `/docs` folder, then select **Save**.
+4. Open `https://barikpriyabrata27.github.io/docker-k8s-cicd/interview.html`.
+
+The quiz loads its question bank from JSON, so it must be opened through GitHub
+Pages or another web server. Clicking the HTML file in the normal GitHub source
+browser will show the file instead of running the quiz.
+
 ## One-time local setup
 
 1. Install Docker Desktop and enable WSL2/Hyper-V backend.
