@@ -25,6 +25,8 @@ runs it, spread as 2 pods per worker node.
   runtime, image build, rollout, and cluster lifecycle diagrams.
 - [Extra repository and operations guide](docs/README_Extra.md) – repository
   details, diagram explanations, Kubernetes options, and cluster patching.
+- [Interactive Kubernetes and CI/CD interview lab](docs/interview.html) –
+  100-question practice and timed interview quiz with rotating attempts.
 
 ## One-time local setup
 

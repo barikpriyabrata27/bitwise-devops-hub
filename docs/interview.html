@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive Kubernetes and CI/CD interview practice quiz">
+  <title>Clustercraft Interview Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="interview.css">
+  <script src="interview.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="../README.md" aria-label="Back to repository README">
+        <span class="brand-mark">K8</span>
+        <span><strong>Clustercraft</strong><small>Interview lab</small></span>
+      </a>
+      <div class="topbar-actions">
+        <span id="bank-count" class="bank-count">100 questions</span>
+        <button id="history-button" class="icon-button" type="button" title="View score history" aria-label="View score history">↗</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="setup-view" class="view setup-view" aria-labelledby="setup-title">
+        <div class="intro-grid">
+          <div>
+            <p class="eyebrow">Kubernetes × CI/CD</p>
+            <h1 id="setup-title">Think like the person on call.</h1>
+            <p class="lede">A focused interview room for architecture decisions, production tradeoffs, and the commands that keep clusters honest.</p>
+          </div>
+          <div class="signal-card">
+            <span class="signal-dot"></span>
+            <span>Local-first practice</span>
+            <strong id="cycle-label">Fresh question cycle</strong>
+          </div>
+        </div>
+
+        <div class="setup-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Configure a session</p>
+              <h2>Choose your pressure level</h2>
+            </div>
+            <span class="mono-label">20 questions / round</span>
+          </div>
+          <div class="mode-grid">
+            <button class="mode-card selected" data-mode="practice" type="button">
+              <span class="mode-number">01</span>
+              <strong>Practice</strong>
+              <span>Reveal the answer and explanation after every choice.</span>
+            </button>
+            <button class="mode-card" data-mode="interview" type="button">
+              <span class="mode-number">02</span>
+              <strong>Interview</strong>
+              <span>25-minute timed round. Review everything at the end.</span>
+            </button>
+          </div>
+          <div class="filters">
+            <label>Focus area
+              <select id="category-select">
+                <option value="All">All areas</option>
+              </select>
+            </label>
+            <label>Difficulty
+              <select id="difficulty-select">
+                <option value="All">All levels</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </label>
+          </div>
+          <div class="setup-footer">
+            <div class="rotation-note"><span>↻</span><span><strong>Fresh set</strong><br>Questions rotate between attempts.</span></div>
+            <button id="start-button" class="primary-button" type="button">Start session <span>→</span></button>
+          </div>
+        </div>
+        <div id="setup-history" class="history-strip"></div>
+      </section>
+
+      <section id="quiz-view" class="view quiz-view hidden" aria-labelledby="question-title">
+        <div class="quiz-header">
+          <button id="quit-button" class="text-button" type="button">← Exit session</button>
+          <div class="progress-wrap"><div class="progress-label"><span id="progress-text">Question 01 of 20</span><span id="timer" class="timer hidden">25:00</span></div><div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div></div>
+          <span id="quiz-mode-label" class="mono-label">PRACTICE</span>
+        </div>
+        <div class="question-layout">
+          <aside class="question-aside"><span id="question-number" class="huge-number">01</span><span id="question-category" class="category-tag">Kubernetes</span><span id="question-difficulty" class="difficulty-tag">Beginner</span></aside>
+          <article class="question-card">
+            <p id="question-kicker" class="eyebrow">Question</p>
+            <h1 id="question-title">Loading question...</h1>
+            <div id="options" class="options" role="radiogroup" aria-label="Answer choices"></div>
+            <div id="explanation" class="explanation hidden"></div>
+            <div class="question-footer"><span id="answered-label" class="muted">Choose the answer that best fits.</span><button id="next-button" class="primary-button" type="button" disabled>Lock answer <span>→</span></button></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="results-view" class="view results-view hidden" aria-labelledby="results-title">
+        <div class="results-hero"><p class="eyebrow">Session complete</p><h1 id="results-title">Your operating picture</h1><div class="score-display"><strong id="score-value">0%</strong><span id="score-detail">0 of 20 correct</span></div></div>
+        <div class="results-grid"><div class="result-panel"><p class="eyebrow">By focus area</p><div id="category-results"></div></div><div class="result-panel"><p class="eyebrow">What next?</p><div class="next-actions"><button id="new-set-button" class="primary-button" type="button">New question set <span>→</span></button><button id="retry-button" class="secondary-button" type="button">Retry this set</button><button id="reset-button" class="text-button" type="button">Reset question cycle</button></div></div></div>
+        <div id="review-list" class="review-list"></div>
+      </section>
+    </main>
+    <footer><span>Built for thoughtful answers, not trivia velocity.</span><a href="README_Extra.md">Repository guide</a></footer>
+  </div>
+  <div id="history-dialog" class="dialog hidden" role="dialog" aria-modal="true" aria-labelledby="history-title"><div class="dialog-card"><button id="close-history" class="close-button" type="button" aria-label="Close score history">×</button><p class="eyebrow">Local history</p><h2 id="history-title">Previous rounds</h2><div id="history-list"></div><button id="clear-history" class="text-button" type="button">Clear history</button></div></div>
+</body>
+</html>

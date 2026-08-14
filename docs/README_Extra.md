@@ -59,8 +59,16 @@ docker-k8s-cicd/
 |-- docs/
 |   |-- diagrams.md
 |   |   Mermaid diagrams and detailed architecture notes.
-|   `-- README_Extra.md
-|       This companion guide.
+|   |-- README_Extra.md
+|   |   This companion guide.
+|   |-- interview.html
+|   |   Standalone interactive interview quiz.
+|   |-- interview.css
+|   |   Quiz visual styling.
+|   |-- interview.js
+|   |   Quiz state, scoring, rotation, and history logic.
+|   `-- interview-questions.json
+|       Curated 100-question Kubernetes and CI/CD bank.
 |-- .dockerignore
 |   Files excluded from the Docker build context.
 |-- LICENSE
@@ -226,3 +234,4 @@ kubectl describe node docker-k8s-cicd-worker
 - [Application Service](../k8s/service.yaml)
 - [Cluster patch workflow](../.github/workflows/patch.yml)
 - [Application deployment workflow](../.github/workflows/cd.yml)
+- [Interactive interview lab](interview.html)
