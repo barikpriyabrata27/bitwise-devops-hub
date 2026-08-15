@@ -44,3 +44,6 @@ jobs:
           kubectl apply -f k8s/service.yaml
           kubectl set image deployment/python-app python-app=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           kubectl rollout status deployment/python-app
+
+      - name: Verify deployment endpoints
+        run: ./scripts/smoke-test.sh

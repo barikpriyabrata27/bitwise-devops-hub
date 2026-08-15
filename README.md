@@ -26,7 +26,9 @@ runs it, spread as 2 pods per worker node.
 - [Extra repository and operations guide](docs/README_Extra.md) – repository
   details, diagram explanations, Kubernetes options, and cluster patching.
 - [Interactive Kubernetes and CI/CD interview lab](docs/interview.html) –
-  100-question practice and timed interview quiz with rotating attempts.
+  1,060-question practice and timed interview quiz with rotating attempts.
+- [Hands-on DevOps labs](docs/labs/README.md) – runnable application,
+  container, Helm, Kubernetes, and troubleshooting exercises.
 
 ### Opening the interview lab
 

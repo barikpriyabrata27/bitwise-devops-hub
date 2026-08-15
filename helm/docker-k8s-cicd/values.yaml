@@ -1,0 +1,34 @@
+replicaCount: 2
+
+image:
+  repository: ghcr.io/barikpriyabrata27/docker-k8s-cicd
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5000
+
+nodeSelector: {}
+
+topologySpreadConstraints:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+probes:
+  readiness:
+    initialDelaySeconds: 3
+    periodSeconds: 5
+  liveness:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+
+networkPolicy:
+  enabled: true

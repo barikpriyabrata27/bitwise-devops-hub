@@ -30,3 +30,6 @@ kubectl rollout status deployment/python-app
 
 echo "Pods per node:"
 kubectl get pods -o wide -l app=python-app
+
+echo "Verifying application endpoints..."
+"${SCRIPT_DIR}/scripts/smoke-test.sh"

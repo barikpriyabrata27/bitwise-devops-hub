@@ -6,6 +6,8 @@ on:
     paths:
       - "app/**"
       - "Dockerfile"
+      - "k8s/**"
+      - "helm/**"
       - ".github/workflows/ci.yml"
   workflow_dispatch:
 
@@ -18,7 +20,37 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        run: pip install -r app/requirements.txt
+
+      - name: Run application tests
+        run: python -m pytest app/test_app.py
+
+      - name: Build container image
+        run: docker build --tag docker-k8s-cicd:ci .
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Validate Helm chart
+        run: |
+          helm lint helm/docker-k8s-cicd
+          helm template docker-k8s-cicd helm/docker-k8s-cicd \
+            --values helm/docker-k8s-cicd/values-kind.yaml > /tmp/docker-k8s-cicd-manifests.yaml
+
   build-and-push:
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

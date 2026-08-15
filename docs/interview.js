@@ -35,6 +35,30 @@ function filteredBank() {
   return state.questions.filter((question) => (state.filters.category === "All" || question.category === state.filters.category) && (state.filters.difficulty === "All" || question.difficulty === state.filters.difficulty));
 }
 
+function renderQuickFilters() {
+  const categories = [...new Set(state.questions.map((question) => question.category))].sort();
+  const counts = categories.reduce((accumulator, category) => {
+    accumulator[category] = state.questions.filter((question) => question.category === category).length;
+    return accumulator;
+  }, {});
+  $("#quick-filter-list").innerHTML = [
+    { category: "All", label: "All" },
+    ...categories.map((category) => ({ category, label: category }))
+  ].map(({ category, label }) => {
+    const count = category === "All" ? state.questions.length : counts[category];
+    const selectedClass = state.filters.category === category ? "selected" : "";
+    return `<button class="quick-filter-chip ${selectedClass}" type="button" data-category="${escapeHTML(category)}">${escapeHTML(label)} <span>${count}</span></button>`;
+  }).join("");
+  document.querySelectorAll(".quick-filter-chip").forEach((button) => {
+    button.addEventListener("click", () => {
+      const selectedCategory = button.dataset.category;
+      state.filters.category = selectedCategory;
+      $("#category-select").value = selectedCategory;
+      renderQuickFilters();
+    });
+  });
+}
+
 function prepareQuestions(questions) {
   return questions.map((question) => ({ ...question, options: shuffle(question.options.map((text, index) => ({ text, original: index }))) }));
 }
@@ -60,7 +84,12 @@ function makeQuestionSet(retry = false) {
 }
 
 function showView(name) { Object.entries(views).forEach(([key, view]) => view.classList.toggle("hidden", key !== name)); window.scrollTo({ top: 0, behavior: "smooth" }); }
-function updateSetupMeta() { const seen = getSeenIds().length; $("#cycle-label").textContent = seen ? `${seen} of 100 questions seen` : "Fresh question cycle"; $("#setup-history").textContent = getHistory().length ? `${getHistory().length} saved rounds · your progress stays in this browser` : "No saved rounds yet"; }
+function updateSetupMeta() {
+  const seen = getSeenIds().length;
+  const totalQuestions = state.questions.length || 500;
+  $("#cycle-label").textContent = seen ? `${seen} of ${totalQuestions} questions seen` : "Fresh question cycle";
+  $("#setup-history").textContent = getHistory().length ? `${getHistory().length} saved rounds · your progress stays in this browser` : "No saved rounds yet";
+}
 
 function startSession(retry = false) {
   const set = makeQuestionSet(retry);
@@ -89,7 +118,7 @@ function renderQuestion() {
   $("#question-difficulty").textContent = question.difficulty;
   $("#question-title").textContent = question.question;
   $("#answered-label").textContent = state.mode === "practice" ? "Choose the answer that best fits." : "Commit to an answer before moving on.";
-  $("#next-button").textContent = state.current === QUESTION_COUNT - 1 ? "Finish session →" : "Lock answer →";
+  $("#next-button").textContent = state.current === QUESTION_COUNT - 1 ? "Finalize answer →" : "Lock answer →";
   $("#next-button").disabled = true;
   $("#explanation").classList.add("hidden");
   $("#options").innerHTML = question.options.map((option, index) => `<button class="option" type="button" data-index="${index}" role="radio"><span class="option-letter">${String.fromCharCode(65 + index)}</span><span>${escapeHTML(option.text)}</span></button>`).join("");
@@ -97,17 +126,35 @@ function renderQuestion() {
 }
 
 function chooseAnswer(index) {
-  if (state.answers[state.current]) return;
   const question = state.questions[state.current];
   const chosen = question.options[index];
   const correct = chosen.original === question.answer;
-  state.answers[state.current] = { questionId: question.id, selected: chosen.text, correct, correctAnswer: question.options.find((option) => option.original === question.answer).text };
+  state.answers[state.current] = { questionId: question.id, selected: chosen.text, correct, correctAnswer: question.options.find((option) => option.original === question.answer).text, locked: state.mode === "practice" };
   document.querySelectorAll(".option").forEach((button, buttonIndex) => { button.disabled = true; if (buttonIndex === index && correct) button.classList.add("correct"); if (buttonIndex === index && !correct) button.classList.add("wrong"); if (question.options[buttonIndex].original === question.answer) button.classList.add("correct"); });
   $("#next-button").disabled = false;
-  if (state.mode === "practice") { $("#explanation").innerHTML = `<strong>${correct ? "Good call." : "Not quite."}</strong> ${escapeHTML(question.explanation)}`; $("#explanation").classList.remove("hidden"); }
+  if (state.mode === "practice") {
+    revealAnswerExplanation();
+  }
 }
 
-function nextQuestion() { if (!state.answers[state.current]) return; if (state.current === QUESTION_COUNT - 1) finishSession(); else { state.current += 1; renderQuestion(); } }
+function revealAnswerExplanation() {
+  const question = state.questions[state.current];
+  const answer = state.answers[state.current];
+  if (!answer) return;
+  answer.locked = true;
+  $("#explanation").innerHTML = `<strong>${answer.correct ? "Good call." : "Not quite."}</strong> ${escapeHTML(question.explanation)}`;
+  $("#explanation").classList.remove("hidden");
+  $("#next-button").textContent = state.current === QUESTION_COUNT - 1 ? "Finish session →" : "Next question →";
+}
+
+function nextQuestion() {
+  if (!state.answers[state.current]) return;
+  if (!state.answers[state.current].locked) {
+    revealAnswerExplanation();
+    return;
+  }
+  if (state.current === QUESTION_COUNT - 1) finishSession(); else { state.current += 1; renderQuestion(); }
+}
 function finishSession() { clearInterval(state.timerId); const score = state.answers.filter((answer) => answer && answer.correct).length; const result = { score, total: QUESTION_COUNT, mode: state.mode, date: new Date().toISOString() }; saveHistory([...getHistory(), result]); renderResults(score); showView("results"); }
 
 function renderResults(score) {
@@ -120,6 +167,6 @@ function renderResults(score) {
 
 function renderHistory() { const history = getHistory().reverse(); $("#history-list").innerHTML = history.length ? history.map((item) => `<div class="history-entry"><span>${new Date(item.date).toLocaleDateString()} · ${item.mode}</span><strong>${item.score}/${item.total}</strong></div>`).join("") : `<p class="muted">No rounds recorded yet.</p>`; $("#history-dialog").classList.remove("hidden"); }
 
-async function init() { const response = await fetch("interview-questions.json"); state.questions = await response.json(); $("#bank-count").textContent = `${state.questions.length} questions`; [...new Set(state.questions.map((question) => question.category))].sort().forEach((category) => $("#category-select").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(category)}">${escapeHTML(category)}</option>`)); updateSetupMeta(); }
+async function init() { const response = await fetch("interview-questions.json"); state.questions = await response.json(); $("#bank-count").textContent = `${state.questions.length} questions`; [...new Set(state.questions.map((question) => question.category))].sort().forEach((category) => $("#category-select").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(category)}">${escapeHTML(category)}</option>`)); renderQuickFilters(); updateSetupMeta(); }
 
-document.addEventListener("DOMContentLoaded", () => { init().catch(() => { $("#question-title").textContent = "The question bank could not be loaded."; }); document.querySelectorAll(".mode-card").forEach((button) => button.addEventListener("click", () => { document.querySelectorAll(".mode-card").forEach((card) => card.classList.remove("selected")); button.classList.add("selected"); state.mode = button.dataset.mode; })); $("#category-select").addEventListener("change", (event) => { state.filters.category = event.target.value; }); $("#difficulty-select").addEventListener("change", (event) => { state.filters.difficulty = event.target.value; }); $("#start-button").addEventListener("click", () => startSession()); $("#next-button").addEventListener("click", nextQuestion); $("#quit-button").addEventListener("click", () => { clearInterval(state.timerId); showView("setup"); updateSetupMeta(); }); $("#new-set-button").addEventListener("click", () => startSession()); $("#retry-button").addEventListener("click", () => startSession(true)); $("#reset-button").addEventListener("click", () => { localStorage.removeItem(SEEN_KEY); updateSetupMeta(); startSession(); }); $("#history-button").addEventListener("click", renderHistory); $("#close-history").addEventListener("click", () => $("#history-dialog").classList.add("hidden")); $("#clear-history").addEventListener("click", () => { localStorage.removeItem(HISTORY_KEY); renderHistory(); updateSetupMeta(); }); });
+document.addEventListener("DOMContentLoaded", () => { init().catch(() => { $("#question-title").textContent = "The question bank could not be loaded."; }); document.querySelectorAll(".mode-card").forEach((button) => button.addEventListener("click", () => { document.querySelectorAll(".mode-card").forEach((card) => card.classList.remove("selected")); button.classList.add("selected"); state.mode = button.dataset.mode; })); $("#category-select").addEventListener("change", (event) => { state.filters.category = event.target.value; renderQuickFilters(); }); $("#difficulty-select").addEventListener("change", (event) => { state.filters.difficulty = event.target.value; }); $("#start-button").addEventListener("click", () => startSession()); $("#next-button").addEventListener("click", nextQuestion); $("#quit-button").addEventListener("click", () => { clearInterval(state.timerId); showView("setup"); updateSetupMeta(); }); $("#new-set-button").addEventListener("click", () => startSession()); $("#retry-button").addEventListener("click", () => startSession(true)); $("#reset-button").addEventListener("click", () => { localStorage.removeItem(SEEN_KEY); updateSetupMeta(); startSession(); }); $("#history-button").addEventListener("click", renderHistory); $("#close-history").addEventListener("click", () => $("#history-dialog").classList.add("hidden")); $("#clear-history").addEventListener("click", () => { localStorage.removeItem(HISTORY_KEY); renderHistory(); updateSetupMeta(); }); });
