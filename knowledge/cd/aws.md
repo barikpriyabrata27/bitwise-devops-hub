@@ -8,7 +8,8 @@ ALB/ASG, CloudWatch, and more), each a self-contained root module.
 
 Labs consume shared, reusable modules from
 [bitwise-devops-terraform](https://github.com/barikpriyabrata27/bitwise-devops-terraform)
-via a Git module source instead of duplicating Terraform code:
+via a Git module source instead of duplicating Terraform code (see
+[shared/terraform.md](../shared/terraform.md)):
 
 ```hcl
 module "vpc" {

@@ -15,6 +15,6 @@ has its own small example repo:
 
 AWS and GCP both consume shared Terraform modules from
 [bitwise-devops-terraform](https://github.com/barikpriyabrata27/bitwise-devops-terraform)
-instead of duplicating infrastructure code.
+instead of duplicating infrastructure code — see [shared/terraform.md](../shared/terraform.md).
 
 Previous: [CI](../ci/README.md).

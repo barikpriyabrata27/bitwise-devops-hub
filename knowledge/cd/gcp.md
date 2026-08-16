@@ -8,6 +8,7 @@ Demonstrated in: [bitwise-devops-gcp](https://github.com/barikpriyabrata27/bitwi
 
 Like AWS, GCP labs consume shared modules from
 [bitwise-devops-terraform](https://github.com/barikpriyabrata27/bitwise-devops-terraform)
-(`modules/gcp/network`) via a Git module source rather than local copies.
+(`modules/gcp/network`) via a Git module source rather than local copies
+(see [shared/terraform.md](../shared/terraform.md)).
 
 Back to [CD overview](README.md).

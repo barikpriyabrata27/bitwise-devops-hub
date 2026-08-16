@@ -44,8 +44,9 @@ Small repos that each illustrate deploying an app to a different target.
 
 [`knowledge/`](knowledge/README.md) breaks the pipeline into topic docs that
 link back to the repos above: [CI](knowledge/ci/README.md) (Build, Security,
-Zipping, Release) and [CD](knowledge/cd/README.md) (NAS Windows/Linux, PCF,
-Kubernetes, AWS, GCP, Cloud Run).
+Zipping, Release), [CD](knowledge/cd/README.md) (NAS Windows/Linux, PCF,
+Kubernetes, AWS, GCP, Cloud Run), and
+[shared Terraform modules](knowledge/shared/terraform.md).
 
 ## Interview quiz
 
