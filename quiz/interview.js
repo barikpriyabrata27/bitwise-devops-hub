@@ -2,6 +2,31 @@ const QUESTION_COUNT = 20;
 const SEEN_KEY = "clustercraft-seen-questions";
 const HISTORY_KEY = "clustercraft-score-history";
 
+// Knowledge base docs live in the same repo; more topic files land here over time.
+const KNOWLEDGE_BASE_URL = "https://github.com/barikpriyabrata27/bitwise-devops-hub/blob/main/knowledge";
+const CATEGORY_KNOWLEDGE = {
+  "CI/CD": `${KNOWLEDGE_BASE_URL}/ci/README.md`,
+  "GitHub Actions": `${KNOWLEDGE_BASE_URL}/ci/README.md`,
+  "Bamboo": `${KNOWLEDGE_BASE_URL}/ci/README.md`,
+  "Maven": `${KNOWLEDGE_BASE_URL}/ci/build.md`,
+  "DevSecOps": `${KNOWLEDGE_BASE_URL}/ci/security.md`,
+  "Docker and Containers": `${KNOWLEDGE_BASE_URL}/ci/zipping.md`,
+  "Nexus and Artifactory": `${KNOWLEDGE_BASE_URL}/ci/release.md`,
+  "Kubernetes Fundamentals": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
+  "Kubernetes Networking": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
+  "Kubernetes Operations": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
+  "Kubernetes Security": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
+  "Kubernetes Storage": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
+  "Kubernetes Troubleshooting": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
+  "Helm": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
+  "AWS": `${KNOWLEDGE_BASE_URL}/cd/aws.md`,
+  "Terraform": `${KNOWLEDGE_BASE_URL}/cd/README.md`
+};
+
+// Falls back to the knowledge base index until a category gets its own doc.
+function getKnowledgeLink(category) { return CATEGORY_KNOWLEDGE[category] || `${KNOWLEDGE_BASE_URL}/README.md`; }
+function learnMoreLink(category) { return `<a class="learn-more-link" href="${getKnowledgeLink(category)}" target="_blank" rel="noopener">Learn more: ${escapeHTML(category)} →</a>`; }
+
 const state = {
   questions: [],
   current: 0,
@@ -142,7 +167,8 @@ function revealAnswerExplanation() {
   const answer = state.answers[state.current];
   if (!answer) return;
   answer.locked = true;
-  $("#explanation").innerHTML = `<strong>${answer.correct ? "Good call." : "Not quite."}</strong> ${escapeHTML(question.explanation)}`;
+  const learnMore = answer.correct ? "" : `<div class="learn-more-wrap">${learnMoreLink(question.category)}</div>`;
+  $("#explanation").innerHTML = `<strong>${answer.correct ? "Good call." : "Not quite."}</strong> ${escapeHTML(question.explanation)}${learnMore}`;
   $("#explanation").classList.remove("hidden");
   $("#next-button").textContent = state.current === QUESTION_COUNT - 1 ? "Finish session →" : "Next question →";
 }
@@ -162,7 +188,7 @@ function renderResults(score) {
   $("#score-detail").textContent = `${score} of ${QUESTION_COUNT} correct`;
   const categories = [...new Set(state.questions.map((question) => question.category))];
   $("#category-results").innerHTML = categories.map((category) => { const indexes = state.questions.map((question, index) => question.category === category ? index : -1).filter((index) => index >= 0); const correct = indexes.filter((index) => state.answers[index]?.correct).length; const percent = Math.round((correct / indexes.length) * 100); return `<div class="category-row"><span>${escapeHTML(category)}</span><div class="category-track"><div class="category-fill" style="width:${percent}%"></div></div><strong>${percent}%</strong></div>`; }).join("");
-  $("#review-list").innerHTML = state.questions.map((question, index) => { const answer = state.answers[index]; return `<article class="review-item"><header><h3>${index + 1}. ${escapeHTML(question.question)}</h3><span class="review-result ${answer?.correct ? "" : "incorrect"}">${answer?.correct ? "CORRECT" : "REVIEW"}</span></header><p><strong>Answer:</strong> ${escapeHTML(question.options.find((option) => option.original === question.answer).text)}</p><p>${escapeHTML(question.explanation)}</p></article>`; }).join("");
+  $("#review-list").innerHTML = state.questions.map((question, index) => { const answer = state.answers[index]; const learnMore = answer?.correct ? "" : `<p class="learn-more-wrap">${learnMoreLink(question.category)}</p>`; return `<article class="review-item"><header><h3>${index + 1}. ${escapeHTML(question.question)}</h3><span class="review-result ${answer?.correct ? "" : "incorrect"}">${answer?.correct ? "CORRECT" : "REVIEW"}</span></header><p><strong>Answer:</strong> ${escapeHTML(question.options.find((option) => option.original === question.answer).text)}</p><p>${escapeHTML(question.explanation)}</p>${learnMore}</article>`; }).join("");
 }
 
 function renderHistory() { const history = getHistory().reverse(); $("#history-list").innerHTML = history.length ? history.map((item) => `<div class="history-entry"><span>${new Date(item.date).toLocaleDateString()} · ${item.mode}</span><strong>${item.score}/${item.total}</strong></div>`).join("") : `<p class="muted">No rounds recorded yet.</p>`; $("#history-dialog").classList.remove("hidden"); }
