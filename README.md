@@ -40,6 +40,13 @@ Small repos that each illustrate deploying an app to a different target.
 | ------- | ---- |
 | Terraform modules used across the deployment examples | [bitwise-devops-terraform](https://github.com/barikpriyabrata27/bitwise-devops-terraform) |
 
+## Knowledge
+
+[`knowledge/`](knowledge/README.md) breaks the pipeline into topic docs that
+link back to the repos above: [CI](knowledge/ci/README.md) (Build, Security,
+Zipping, Release) and [CD](knowledge/cd/README.md) (NAS Windows/Linux, PCF,
+Kubernetes, AWS, GCP, Cloud Run).
+
 ## Interview quiz
 
 [`quiz/`](quiz/) contains a standalone, interactive Kubernetes and CI/CD
