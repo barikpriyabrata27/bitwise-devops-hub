@@ -38,7 +38,7 @@ Small repos that each illustrate deploying an app to a different target.
 
 | Purpose | Repo |
 | ------- | ---- |
-| Terraform modules used across the deployment examples | [terraform_module](https://github.com/barikpriyabrata27/terraform_module) |
+| Terraform modules used across the deployment examples | [bitwise-devops-terraform](https://github.com/barikpriyabrata27/bitwise-devops-terraform) |
 
 ## Interview quiz
 
