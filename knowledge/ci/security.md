@@ -16,4 +16,8 @@ or released. Typical checks demonstrated across the linked repos:
 Security failures should block the pipeline before Zipping/Release, the same
 way a failed build does.
 
+See [bitwise-devops-csharp](https://github.com/barikpriyabrata27/bitwise-devops-csharp)'s
+`security` job (`dotnet list package --vulnerable --include-transitive`) for a
+concrete example.
+
 Previous: [Build](build.md). Next: [Zipping](zipping.md).

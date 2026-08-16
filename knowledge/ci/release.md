@@ -12,4 +12,8 @@ CD:
 A release should be immutable and traceable back to the exact commit/build
 that produced it (tag, version number, or digest).
 
+See [bitwise-devops-csharp](https://github.com/barikpriyabrata27/bitwise-devops-csharp)'s
+`release` job for a concrete example: it attaches the zipped artifact to a
+GitHub Release tagged with the build version.
+
 Previous: [Zipping](zipping.md). Next: [CD](../cd/README.md).
