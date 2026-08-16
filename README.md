@@ -40,6 +40,33 @@ Small repos that each illustrate deploying an app to a different target.
 | ------- | ---- |
 | Terraform modules used across the deployment examples | [terraform_module](https://github.com/barikpriyabrata27/terraform_module) |
 
+## Interview quiz
+
+[`quiz/`](quiz/) contains a standalone, interactive Kubernetes and CI/CD
+interview practice quiz (1,060-question bank, practice and timed modes,
+rotating attempts), moved here from `bitwise-devops-kubernates` so it can be
+shared across all the linked example repos.
+
+- `quiz/interview.html`, `interview.css`, `interview.js` – the quiz app.
+- `quiz/interview-questions.json` – the question bank.
+- `quiz/expand-interview-bank.py` – generator script used to extend the bank.
+
+### Opening the quiz
+
+The quiz loads its question bank from JSON at runtime, so it must be served
+over HTTP rather than opened directly as a file.
+
+- **GitHub Pages**: GitHub Pages only serves from the repository root or a
+  `/docs` folder, not arbitrary folders like `/quiz`. Either enable Pages with
+  **Source: Deploy from a branch**, **Folder: `/ (root)`**, then open
+  `https://barikpriyabrata27.github.io/bitwise-devops-hub/quiz/interview.html`,
+  or copy/rename `quiz/` to `docs/` if you prefer the `/docs` folder option.
+- **Local testing**:
+  ```bash
+  python -m http.server 8000 --directory quiz
+  ```
+  then open `http://localhost:8000/interview.html`.
+
 ## Status
 
 The Kubernetes deployment example (`bitwise-devops-kubernates`) already
