@@ -1,86 +1,49 @@
-# docker-k8s-cicd
+# bitwise-devops-hub
 
-A minimal Python app with a full CI/CD pipeline: GitHub Actions builds a Docker
-image and pushes it to GitHub Container Registry (GHCR), and a local
-Kubernetes cluster (1 control-plane + 2 worker nodes, kind-based) pulls and
-runs it, spread as 2 pods per worker node.
+Root/index repository for a set of small, focused example repositories used to
+learn and demonstrate different CI approaches and deployment targets. Each
+linked repository is self-contained (its own README, pipeline, and manifests)
+so it can be studied or reused independently.
 
-## Components
+All linked repos below are private under the `barikpriyabrata27` GitHub
+account.
 
-- `app/` – Flask "hello world" service (`/` and `/healthz`).
-- `Dockerfile` – container image build.
-- `.github/workflows/ci.yml` – builds the image and pushes to
-  `ghcr.io/barikpriyabrata27/docker-k8s-cicd` on every push to `main`.
-- `.github/workflows/cd.yml` – runs on a **self-hosted runner** on this
-  machine, pulls the latest image, loads it into the local kind cluster and
-  rolls out the deployment.
-- `kind-config.yaml` – defines a kind cluster with 1 control-plane + 2 worker
-  nodes.
-- `k8s/deployment.yaml` – 4 replicas, scheduled only on worker nodes and
-  spread evenly (2 pods per worker) via `topologySpreadConstraints`.
-- `k8s/service.yaml` – NodePort service exposing the app on port `30080`.
-- `scripts/setup-kind-cluster.sh` – one-shot script to create the cluster,
-  label the worker nodes, and do an initial deploy.
-- [Repository diagrams](docs/diagrams.md) – architecture, CI/CD, Kubernetes,
-  runtime, image build, rollout, and cluster lifecycle diagrams.
-- [Extra repository and operations guide](docs/README_Extra.md) – repository
-  details, diagram explanations, Kubernetes options, and cluster patching.
-- [Interactive Kubernetes and CI/CD interview lab](docs/interview.html) –
-  1,060-question practice and timed interview quiz with rotating attempts.
-- [Hands-on DevOps labs](docs/labs/README.md) – runnable application,
-  container, Helm, Kubernetes, and troubleshooting exercises.
+## CI understanding examples
 
-### Opening the interview lab
+Small repos that each illustrate a different source-control/CI shape.
 
-To make the quiz available to visitors, enable GitHub Pages in the repository:
+| # | Type | Repo |
+| - | ---- | ---- |
+| 1 | C# small repo | [bitwise-devops-csharp](https://github.com/barikpriyabrata27/bitwise-devops-csharp) |
+| 2 | Python small repo | [bitwise-devops-python](https://github.com/barikpriyabrata27/bitwise-devops-python) |
+| 3 | Java small repo | [bitwise-devops-java](https://github.com/barikpriyabrata27/bitwise-devops-java) |
+| 4 | Version-control-only repo (no build/CI) | [bitwise-devops-vcs](https://github.com/barikpriyabrata27/bitwise-devops-vcs) |
+| 5 | Monorepo example | [bitwise-devops-monorepo](https://github.com/barikpriyabrata27/bitwise-devops-monorepo) |
 
-1. Open **Settings → Pages**.
-2. Under **Build and deployment**, choose **Deploy from a branch**.
-3. Select the `main` branch and the `/docs` folder, then select **Save**.
-4. Open `https://barikpriyabrata27.github.io/docker-k8s-cicd/interview.html`.
+## Deployment examples
 
-The quiz loads its question bank from JSON, so it must be opened through GitHub
-Pages or another web server. Clicking the HTML file in the normal GitHub source
-browser will show the file instead of running the quiz.
+Small repos that each illustrate deploying an app to a different target.
 
-## One-time local setup
+| # | Target | Repo |
+| - | ------ | ---- |
+| 1 | NAS deployment (Windows) | [bitwise-devops-nasw](https://github.com/barikpriyabrata27/bitwise-devops-nasw) |
+| 2 | NAS deployment (Linux) | [bitwise-devops-nasl](https://github.com/barikpriyabrata27/bitwise-devops-nasl) |
+| 3 | PCF (Pivotal/Tanzu Application Service) deployment | [bitwise-devops-pcf](https://github.com/barikpriyabrata27/bitwise-devops-pcf) |
+| 4 | Kubernetes deployment | [bitwise-devops-kubernates](https://github.com/barikpriyabrata27/bitwise-devops-kubernates) |
+| 5 | AWS deployment | [bitwise-devops-aws](https://github.com/barikpriyabrata27/bitwise-devops-aws) |
+| 6 | GCP deployment | [bitwise-devops-gcp](https://github.com/barikpriyabrata27/bitwise-devops-gcp) |
+| 7 | Cloud Run deployment | [bitwise-devops-cloudrun](https://github.com/barikpriyabrata27/bitwise-devops-cloudrun) |
 
-1. Install Docker Desktop and enable WSL2/Hyper-V backend.
-2. Install `kind` and `kubectl`.
-3. Run:
-   ```bash
-   bash scripts/setup-kind-cluster.sh
-   ```
-4. Visit `http://localhost:30080` (kind maps the NodePort via the
-   control-plane's port mappings if configured, otherwise use
-   `kubectl port-forward svc/python-app 5000:5000`).
+## Shared infrastructure
 
-## Pausing/resuming the cluster (save resources between test sessions)
+| Purpose | Repo |
+| ------- | ---- |
+| Terraform modules used across the deployment examples | [terraform_module](https://github.com/barikpriyabrata27/terraform_module) |
 
-The kind cluster nodes are just Docker containers. When you're done testing:
+## Status
 
-```bash
-bash scripts/stop-cluster.sh   # docker stop the 3 node containers
-bash scripts/start-cluster.sh  # docker start them, wait for Ready, show pods
-```
-
-This preserves the cluster, deployed manifests, and loaded images — no
-need to recreate anything. Full teardown (`kind delete cluster --name
-docker-k8s-cicd`) is only needed if you want to remove it entirely.
-
-## CI/CD flow
-
-1. Push to `main` → **CI** builds the image and pushes
-   `ghcr.io/barikpriyabrata27/docker-k8s-cicd:latest` (and a short-SHA tag) to
-   GHCR.
-2. **CD** (triggered after CI succeeds) runs on a self-hosted runner
-   registered on this machine — GitHub-hosted runners cannot reach a local
-   cluster. It pulls the new image, loads it into kind, and updates the
-   Deployment.
-
-## Registering a self-hosted runner
-
-In your GitHub repo: **Settings → Actions → Runners → New self-hosted
-runner**, then follow the generated commands to install and start the runner
-service on this machine. The runner must have Docker, `kind`, and `kubectl`
-on its `PATH` and access to the kind cluster's kubeconfig.
+The Kubernetes deployment example (`bitwise-devops-kubernates`) already
+contains a working Flask app + Docker + kind CI/CD pipeline, migrated from
+this repository's previous history. The rest of the linked repos are freshly
+created placeholders (`README.md` only) and still need their example
+content, pipelines, and manifests filled in.

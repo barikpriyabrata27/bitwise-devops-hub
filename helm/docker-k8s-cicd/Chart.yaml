@@ -1,6 +1,0 @@
-apiVersion: v2
-name: docker-k8s-cicd
-description: Hands-on Helm deployment for the docker-k8s-cicd learning application.
-type: application
-version: 0.1.0
-appVersion: "1.0.0"
