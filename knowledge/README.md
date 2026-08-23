@@ -1,12 +1,17 @@
 # Knowledge
 
-Topic-organized reference docs that tie the linked example repos together
-into a coherent CI/CD story: what each stage does, and which repo
-demonstrates it.
+Topic-organized reference docs for the DevOps roadmap. Each roadmap phase
+has its own folder, and each roadmap topic has its own Markdown file.
 
-- [`ci/`](ci/README.md) – Continuous Integration: Build, Security, Zipping, Release.
-- [`cd/`](cd/README.md) – Continuous Deployment: where a build ends up (NAS, PCF, Kubernetes, AWS, GCP, Cloud Run).
-- [`shared/`](shared/terraform.md) – Shared infrastructure: the Terraform module registry consumed by AWS and GCP.
+- [CI/CD](ci-cd/README.md)
+- [Terraform](terraform/README.md)
+- [AWS](aws/README.md)
+- [GCP](gcp/README.md)
+- [Ansible](ansible/README.md)
+- [Docker](docker/README.md)
+- [Kubernetes](kubernetes/README.md)
+- [DevSecOps](devsecops/README.md)
+- [Authentication and Authorization](auth/README.md)
 
 See the [top-level README](../README.md) for the full repo index and the
 [interview quiz](../quiz/interview.html).

@@ -6,26 +6,51 @@ const HISTORY_KEY = "clustercraft-score-history";
 const KNOWLEDGE_BASE_URL =
   "https://github.com/barikpriyabrata27/bitwise-devops-hub/blob/main/knowledge";
 
+const KNOWLEDGE_PATHS = {
+  knowledge: `${KNOWLEDGE_BASE_URL}/README.md`,
+  ciCd: `${KNOWLEDGE_BASE_URL}/ci-cd/README.md`,
+  terraform: `${KNOWLEDGE_BASE_URL}/terraform/README.md`,
+  aws: `${KNOWLEDGE_BASE_URL}/aws/README.md`,
+  gcp: `${KNOWLEDGE_BASE_URL}/gcp/README.md`,
+  ansible: `${KNOWLEDGE_BASE_URL}/ansible/README.md`,
+  docker: `${KNOWLEDGE_BASE_URL}/docker/README.md`,
+  kubernetes: `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  devsecops: `${KNOWLEDGE_BASE_URL}/devsecops/README.md`,
+  auth: `${KNOWLEDGE_BASE_URL}/auth/README.md`
+};
+
+const PHASE_KNOWLEDGE = {
+  "Phase I — CI/CD": `${KNOWLEDGE_BASE_URL}/ci-cd/README.md`,
+  "Phase II — Terraform": `${KNOWLEDGE_BASE_URL}/terraform/README.md`,
+  "Phase III — AWS": `${KNOWLEDGE_BASE_URL}/aws/README.md`,
+  "Phase IV — GCP": `${KNOWLEDGE_BASE_URL}/gcp/README.md`,
+  "Phase V — Ansible": `${KNOWLEDGE_BASE_URL}/ansible/README.md`,
+  "Phase VI — Docker": `${KNOWLEDGE_BASE_URL}/docker/README.md`,
+  "Phase VII — Kubernetes": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "Phase VIII — DevSecOps": `${KNOWLEDGE_BASE_URL}/devsecops/README.md`,
+  "Phase IX — Authentication & Authorization": `${KNOWLEDGE_BASE_URL}/auth/README.md`
+};
+
 const CATEGORY_KNOWLEDGE = {
-  "CI/CD": `${KNOWLEDGE_BASE_URL}/ci/README.md`,
-  "GitHub Actions": `${KNOWLEDGE_BASE_URL}/ci/README.md`,
-  "Bamboo": `${KNOWLEDGE_BASE_URL}/ci/README.md`,
-  "Maven": `${KNOWLEDGE_BASE_URL}/ci/build.md`,
-  "DevSecOps": `${KNOWLEDGE_BASE_URL}/ci/security.md`,
-  "Docker and Containers": `${KNOWLEDGE_BASE_URL}/ci/zipping.md`,
-  "Nexus and Artifactory": `${KNOWLEDGE_BASE_URL}/ci/release.md`,
-  "Kubernetes Fundamentals": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
-  "Kubernetes Networking": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
-  "Kubernetes Operations": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
-  "Kubernetes Security": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
-  "Kubernetes Storage": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
-  "Kubernetes Troubleshooting": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
-  "Helm": `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`,
-  "AWS": `${KNOWLEDGE_BASE_URL}/cd/aws.md`,
-  "Terraform": `${KNOWLEDGE_BASE_URL}/cd/README.md`,
-  "GCP": `${KNOWLEDGE_BASE_URL}/cd/README.md`,
-  "Ansible": `${KNOWLEDGE_BASE_URL}/cd/README.md`,
-  "Authentication & Authorization": `${KNOWLEDGE_BASE_URL}/ci/security.md`
+  "CI/CD": `${KNOWLEDGE_BASE_URL}/ci-cd/README.md`,
+  "GitHub Actions": `${KNOWLEDGE_BASE_URL}/ci-cd/github-actions.md`,
+  "Bamboo": `${KNOWLEDGE_BASE_URL}/ci-cd/bamboo.md`,
+  "Maven": `${KNOWLEDGE_BASE_URL}/ci-cd/maven.md`,
+  "DevSecOps": `${KNOWLEDGE_BASE_URL}/devsecops/devsecops.md`,
+  "Docker and Containers": `${KNOWLEDGE_BASE_URL}/docker/docker-and-containers.md`,
+  "Nexus and Artifactory": `${KNOWLEDGE_BASE_URL}/ci-cd/nexus-artifactory.md`,
+  "Kubernetes Fundamentals": `${KNOWLEDGE_BASE_URL}/kubernetes/kubernetes-fundamentals.md`,
+  "Kubernetes Networking": `${KNOWLEDGE_BASE_URL}/kubernetes/kubernetes-networking.md`,
+  "Kubernetes Operations": `${KNOWLEDGE_BASE_URL}/kubernetes/kubernetes-operations.md`,
+  "Kubernetes Security": `${KNOWLEDGE_BASE_URL}/kubernetes/kubernetes-security.md`,
+  "Kubernetes Storage": `${KNOWLEDGE_BASE_URL}/kubernetes/kubernetes-storage.md`,
+  "Kubernetes Troubleshooting": `${KNOWLEDGE_BASE_URL}/kubernetes/kubernetes-troubleshooting.md`,
+  "Helm": `${KNOWLEDGE_BASE_URL}/kubernetes/helm.md`,
+  "AWS": `${KNOWLEDGE_BASE_URL}/aws/README.md`,
+  "Terraform": `${KNOWLEDGE_BASE_URL}/terraform/README.md`,
+  "GCP": `${KNOWLEDGE_BASE_URL}/gcp/README.md`,
+  "Ansible": `${KNOWLEDGE_BASE_URL}/ansible/README.md`,
+  "Authentication & Authorization": `${KNOWLEDGE_BASE_URL}/auth/authentication-and-authorization.md`
 };
 
 
@@ -182,76 +207,182 @@ const ROADMAP_TOPICS = {
   ]
 };
 
+const ROADMAP_FOLDERS = {
+  "Phase I — CI/CD": "ci-cd",
+  "Phase II — Terraform": "terraform",
+  "Phase III — AWS": "aws",
+  "Phase IV — GCP": "gcp",
+  "Phase V — Ansible": "ansible",
+  "Phase VI — Docker": "docker",
+  "Phase VII — Kubernetes": "kubernetes",
+  "Phase VIII — DevSecOps": "devsecops",
+  "Phase IX — Authentication & Authorization": "auth"
+};
+
+function getRoadmapKnowledgeLink(phase, topic) {
+  const folder = ROADMAP_FOLDERS[phase];
+  const filename = String(topic || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
+  return folder && filename
+    ? `${KNOWLEDGE_BASE_URL}/${folder}/${filename}.md`
+    : KNOWLEDGE_PATHS.knowledge;
+}
+
 
 // ============================================================
 // TOPIC → KNOWLEDGE BASE MAPPING
 // ============================================================
 
-const TOPIC_KNOWLEDGE = Object.fromEntries([
+const TOPIC_KNOWLEDGE = {
+  "Git / GitHub": `${KNOWLEDGE_BASE_URL}/ci-cd/git-github.md`,
+  "Branching Strategy": `${KNOWLEDGE_BASE_URL}/ci-cd/branching-strategy.md`,
+  "Pull Requests": `${KNOWLEDGE_BASE_URL}/ci-cd/pull-requests.md`,
+  "Maven": `${KNOWLEDGE_BASE_URL}/ci-cd/maven.md`,
+  "pom.xml": `${KNOWLEDGE_BASE_URL}/ci-cd/maven.md`,
+  "Artifact / Version Management": `${KNOWLEDGE_BASE_URL}/ci-cd/README.md`,
+  "Nexus / Artifactory": `${KNOWLEDGE_BASE_URL}/ci-cd/nexus-artifactory.md`,
+  "CI": `${KNOWLEDGE_BASE_URL}/ci-cd/README.md`,
+  "CD": `${KNOWLEDGE_BASE_URL}/ci-cd/README.md`,
+  "Build → Test → Scan → Package → Publish → Deploy": `${KNOWLEDGE_BASE_URL}/ci-cd/README.md`,
+  "Jenkins / Bamboo / GitHub Actions": `${KNOWLEDGE_BASE_URL}/ci-cd/README.md`,
+  "Pipeline YAML": `${KNOWLEDGE_BASE_URL}/ci-cd/README.md`,
+  "Variables / Secrets": `${KNOWLEDGE_BASE_URL}/ci-cd/variables-secrets.md`,
 
-  ...ROADMAP_TOPICS["Phase I — CI/CD"]
-    .map((topic) => [
-      topic,
-      `${KNOWLEDGE_BASE_URL}/ci/README.md`
-    ]),
+  "Terraform": `${KNOWLEDGE_BASE_URL}/terraform/overview.md`,
+  "Provider": `${KNOWLEDGE_BASE_URL}/terraform/overview.md`,
+  "Resource": `${KNOWLEDGE_BASE_URL}/terraform/overview.md`,
+  "Variable": `${KNOWLEDGE_BASE_URL}/terraform/overview.md`,
+  "Output": `${KNOWLEDGE_BASE_URL}/terraform/overview.md`,
+  "State": `${KNOWLEDGE_BASE_URL}/terraform/state.md`,
+  "Module": `${KNOWLEDGE_BASE_URL}/terraform/overview.md`,
+  "Backend": `${KNOWLEDGE_BASE_URL}/terraform/backend.md`,
+  "Workspace": `${KNOWLEDGE_BASE_URL}/terraform/workspace.md`,
+  "Plan": `${KNOWLEDGE_BASE_URL}/terraform/overview.md`,
+  "Apply": `${KNOWLEDGE_BASE_URL}/terraform/overview.md`,
+  "Destroy": `${KNOWLEDGE_BASE_URL}/terraform/overview.md`,
 
-  ...ROADMAP_TOPICS["Phase II — Terraform"]
-    .map((topic) => [
-      topic,
-      `${KNOWLEDGE_BASE_URL}/cd/README.md`
-    ]),
+  "VPC": `${KNOWLEDGE_BASE_URL}/aws/vpc.md`,
+  "Subnet": `${KNOWLEDGE_BASE_URL}/aws/vpc.md`,
+  "Route Table": `${KNOWLEDGE_BASE_URL}/aws/vpc.md`,
+  "Internet Gateway": `${KNOWLEDGE_BASE_URL}/aws/vpc.md`,
+  "NAT": `${KNOWLEDGE_BASE_URL}/aws/vpc.md`,
+  "Security Group": `${KNOWLEDGE_BASE_URL}/aws/vpc.md`,
+  "IAM": `${KNOWLEDGE_BASE_URL}/aws/iam.md`,
+  "EC2": `${KNOWLEDGE_BASE_URL}/aws/ec2.md`,
+  "RDS": `${KNOWLEDGE_BASE_URL}/aws/rds.md`,
+  "Serverless": `${KNOWLEDGE_BASE_URL}/aws/README.md`,
 
-  ...ROADMAP_TOPICS["Phase III — AWS"]
-    .map((topic) => [
-      topic,
-      `${KNOWLEDGE_BASE_URL}/cd/aws.md`
-    ]),
+  "GCP Fundamentals": `${KNOWLEDGE_BASE_URL}/gcp/README.md`,
+  "GCP Console / CLI": `${KNOWLEDGE_BASE_URL}/gcp/README.md`,
+  "Compute Engine": `${KNOWLEDGE_BASE_URL}/gcp/README.md`,
+  "Networking": `${KNOWLEDGE_BASE_URL}/gcp/networking.md`,
+  "Load Balancing": `${KNOWLEDGE_BASE_URL}/gcp/networking.md`,
+  "Cloud DNS": `${KNOWLEDGE_BASE_URL}/gcp/networking.md`,
+  "Managed Instance Groups": `${KNOWLEDGE_BASE_URL}/gcp/README.md`,
+  "Cloud Storage": `${KNOWLEDGE_BASE_URL}/gcp/README.md`,
+  "Database": `${KNOWLEDGE_BASE_URL}/gcp/README.md`,
+  "Containers": `${KNOWLEDGE_BASE_URL}/docker/README.md`,
+  "GKE": `${KNOWLEDGE_BASE_URL}/gcp/README.md`,
+  "Cloud Functions": `${KNOWLEDGE_BASE_URL}/gcp/README.md`,
+  "Cloud Run": `${KNOWLEDGE_BASE_URL}/gcp/README.md`,
 
-  ...ROADMAP_TOPICS["Phase IV — GCP"]
-    .map((topic) => [
-      topic,
-      `${KNOWLEDGE_BASE_URL}/cd/README.md`
-    ]),
+  "Inventory": `${KNOWLEDGE_BASE_URL}/ansible/inventory.md`,
+  "Ad-hoc Commands": `${KNOWLEDGE_BASE_URL}/ansible/README.md`,
+  "Playbook": `${KNOWLEDGE_BASE_URL}/ansible/playbook.md`,
+  "Task": `${KNOWLEDGE_BASE_URL}/ansible/playbook.md`,
+  "Module": `${KNOWLEDGE_BASE_URL}/ansible/README.md`,
+  "Variable": `${KNOWLEDGE_BASE_URL}/ansible/README.md`,
+  "Fact": `${KNOWLEDGE_BASE_URL}/ansible/README.md`,
+  "Template": `${KNOWLEDGE_BASE_URL}/ansible/README.md`,
+  "Handlers": `${KNOWLEDGE_BASE_URL}/ansible/README.md`,
+  "Roles": `${KNOWLEDGE_BASE_URL}/ansible/README.md`,
+  "Vault": `${KNOWLEDGE_BASE_URL}/ansible/README.md`,
+  "AWX": `${KNOWLEDGE_BASE_URL}/ansible/README.md`,
 
-  ...ROADMAP_TOPICS["Phase V — Ansible"]
-    .map((topic) => [
-      topic,
-      `${KNOWLEDGE_BASE_URL}/cd/README.md`
-    ]),
+  "Image": `${KNOWLEDGE_BASE_URL}/docker/README.md`,
+  "Container": `${KNOWLEDGE_BASE_URL}/docker/README.md`,
+  "Dockerfile": `${KNOWLEDGE_BASE_URL}/docker/dockerfile.md`,
+  "Build": `${KNOWLEDGE_BASE_URL}/docker/README.md`,
+  "Registry": `${KNOWLEDGE_BASE_URL}/docker/registry.md`,
+  "Run": `${KNOWLEDGE_BASE_URL}/docker/README.md`,
+  "Network": `${KNOWLEDGE_BASE_URL}/docker/README.md`,
+  "Volume": `${KNOWLEDGE_BASE_URL}/docker/README.md`,
 
-  ...ROADMAP_TOPICS["Phase VI — Docker"]
-    .map((topic) => [
-      topic,
-      `${KNOWLEDGE_BASE_URL}/ci/zipping.md`
-    ]),
+  "Cluster": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "Control Plane": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "Worker Node": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "Pod": `${KNOWLEDGE_BASE_URL}/kubernetes/pod.md`,
+  "Namespace": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "Deployment": `${KNOWLEDGE_BASE_URL}/kubernetes/deployment.md`,
+  "ReplicaSet": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "Service": `${KNOWLEDGE_BASE_URL}/kubernetes/service.md`,
+  "ConfigMap": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "Secret": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "Ingress": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "PVC": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "StatefulSet": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "DaemonSet": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "Job / CronJob": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "Probes": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
+  "Resource Requests / Limits": `${KNOWLEDGE_BASE_URL}/kubernetes/README.md`,
 
-  ...ROADMAP_TOPICS["Phase VII — Kubernetes"]
-    .map((topic) => [
-      topic,
-      `${KNOWLEDGE_BASE_URL}/cd/kubernetes.md`
-    ]),
+  "SAST": `${KNOWLEDGE_BASE_URL}/devsecops/sast.md`,
+  "SCA": `${KNOWLEDGE_BASE_URL}/devsecops/README.md`,
+  "DAST": `${KNOWLEDGE_BASE_URL}/devsecops/README.md`,
+  "Secrets Scanning": `${KNOWLEDGE_BASE_URL}/devsecops/secrets-scanning.md`,
+  "Container Scanning": `${KNOWLEDGE_BASE_URL}/devsecops/README.md`,
 
-  ...ROADMAP_TOPICS["Phase VIII — DevSecOps"]
-    .map((topic) => [
-      topic,
-      `${KNOWLEDGE_BASE_URL}/ci/security.md`
-    ]),
+  "Users": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "Groups": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "Roles": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "Permissions": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "Service Accounts": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "API Keys": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "Tokens": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "SSH Keys": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "Passwords": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "Secrets": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "Vault": `${KNOWLEDGE_BASE_URL}/auth/vault.md`,
+  "RBAC": `${KNOWLEDGE_BASE_URL}/auth/rbac.md`,
+  "Authentication": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "OIDC": `${KNOWLEDGE_BASE_URL}/auth/oidc.md`,
+  "SSO": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "Credential Rotation": `${KNOWLEDGE_BASE_URL}/auth/README.md`,
+  "Least Privilege": `${KNOWLEDGE_BASE_URL}/auth/README.md`
+};
 
-  ...ROADMAP_TOPICS["Phase IX — Authentication & Authorization"]
-    .map((topic) => [
-      topic,
-      `${KNOWLEDGE_BASE_URL}/ci/security.md`
-    ])
-
-]);
-
+function normalizeCategory(value) {
+  return String(value || "").trim().toLowerCase();
+}
 
 function getKnowledgeLink(category) {
-  return (
-    TOPIC_KNOWLEDGE[category] ||
-    CATEGORY_KNOWLEDGE[category] ||
-    `${KNOWLEDGE_BASE_URL}/README.md`
-  );
+  const normalizedCategory = normalizeCategory(category);
+
+  const directTopic = Object.entries(TOPIC_KNOWLEDGE)
+    .find(([key]) => normalizeCategory(key) === normalizedCategory);
+
+  if (directTopic) {
+    return directTopic[1];
+  }
+
+  const directCategory = Object.entries(CATEGORY_KNOWLEDGE)
+    .find(([key]) => normalizeCategory(key) === normalizedCategory);
+
+  if (directCategory) {
+    return directCategory[1];
+  }
+
+  const phaseMatch = Object.entries(PHASE_KNOWLEDGE)
+    .find(([key]) => normalizeCategory(key) === normalizedCategory);
+
+  if (phaseMatch) {
+    return phaseMatch[1];
+  }
+
+  return KNOWLEDGE_PATHS.knowledge;
 }
 
 
