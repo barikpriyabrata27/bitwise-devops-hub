@@ -1,254 +1,456 @@
-# Container Scanning
+# DevSecOps
 
-> Container scanning is the process of analyzing container images for vulnerabilities, insecure configurations, exposed secrets, and other security risks before the images are deployed.
+> **DevSecOps** integrates security into the Development and Operations lifecycle so that security becomes a continuous, automated, shared responsibility rather than a final checkpoint before production.
+
+DevSecOps combines:
+
+```text
+Development
+     +
+Security
+     +
+Operations
+     +
+Automation
+     +
+Continuous Feedback
+```
+
+The fundamental objective is:
+
+> **Build secure software, detect security risks early, automate security controls where practical, and continuously manage security throughout the application's lifecycle.**
 
 ---
 
-# 📚 Overview
+# 1. What Is DevSecOps?
 
-Containers package an application together with its runtime dependencies, libraries, configuration, and operating-system components.
+Traditional software delivery often looked like:
 
-This makes application delivery consistent and portable, but it also creates a security responsibility:
+```text
+Plan
+  ↓
+Develop
+  ↓
+Build
+  ↓
+Test
+  ↓
+Security Review
+  ↓
+Deploy
+  ↓
+Operate
+```
 
-> **A vulnerable application inside a secure container is still vulnerable, and a secure application inside a vulnerable container is also a risk.**
+Security was frequently concentrated near the end.
 
-Container scanning helps identify these issues before a container image reaches production.
+DevSecOps changes the model:
 
-A typical container security flow is:
+```text
+                 SECURITY
+                    │
+                    ▼
+Plan ──► Code ──► Build ──► Test ──► Release ──► Operate
+  ▲       ▲        ▲         ▲          ▲           ▲
+  │       │        │         │          │           │
+  └───────┴────────┴─────────┴──────────┴───────────┘
+                    CONTINUOUS FEEDBACK
+```
+
+Security controls are introduced throughout the lifecycle.
+
+---
+
+# 2. DevSecOps vs DevOps
+
+## DevOps
+
+DevOps focuses on improving collaboration and automation between development and operations.
+
+```text
+Development
+     │
+     ▼
+    CI/CD
+     │
+     ▼
+ Operations
+```
+
+## DevSecOps
+
+DevSecOps adds security as an integrated responsibility.
+
+```text
+             Security
+                │
+                ▼
+Development ──► CI/CD ──► Operations
+```
+
+The goal is not to create a completely separate security pipeline.
+
+Instead:
+
+> **Security controls become part of the existing software delivery pipeline.**
+
+---
+
+# 3. Core DevSecOps Principles
+
+The major principles are:
+
+1. Shift Left
+2. Automate Security
+3. Security as Code
+4. Continuous Security
+5. Shared Responsibility
+6. Risk-Based Decisions
+7. Defense in Depth
+8. Secure Software Supply Chain
+9. Developer Enablement
+10. Continuous Improvement
+
+---
+
+# 4. Shift Left
+
+**Shift Left** means identifying security issues earlier in the development lifecycle.
+
+Traditional model:
+
+```text
+Developer
+   │
+   ▼
+Build
+   │
+   ▼
+Test
+   │
+   ▼
+Security Review
+   │
+   ▼
+Production
+```
+
+Shift-left model:
+
+```text
+Developer
+   │
+   ├── Secure Coding
+   ├── Secrets Scanning
+   ├── SAST
+   └── Dependency Checks
+        │
+        ▼
+      Build
+        │
+        ├── SCA
+        └── Container Scan
+        │
+        ▼
+      Test
+        │
+        └── DAST
+        │
+        ▼
+    Production
+```
+
+The earlier a vulnerability is found, the easier it is generally to understand and fix.
+
+---
+
+# 5. Shift Everywhere
+
+Shift-left should not mean:
+
+> "Security happens only during coding."
+
+A mature DevSecOps model applies security throughout the lifecycle.
+
+```text
+PLAN
+ │
+ ├── Threat Modeling
+ ├── Security Requirements
+ └── Risk Assessment
+ │
+ ▼
+CODE
+ │
+ ├── Secure Coding
+ ├── SAST
+ └── Secrets Scanning
+ │
+ ▼
+BUILD
+ │
+ ├── SCA
+ ├── SBOM
+ └── Container Scanning
+ │
+ ▼
+TEST
+ │
+ ├── DAST
+ ├── Security Tests
+ └── Penetration Testing
+ │
+ ▼
+RELEASE
+ │
+ ├── Security Gates
+ ├── Artifact Verification
+ └── Deployment Controls
+ │
+ ▼
+OPERATE
+ │
+ ├── Monitoring
+ ├── Vulnerability Management
+ └── Incident Response
+```
+
+---
+
+# 6. Secure SDLC
+
+DevSecOps is closely related to the **Secure Software Development Lifecycle (SSDLC)**.
+
+A simplified lifecycle is:
+
+```text
+Requirements
+     │
+     ▼
+Design
+     │
+     ▼
+Development
+     │
+     ▼
+Build
+     │
+     ▼
+Testing
+     │
+     ▼
+Release
+     │
+     ▼
+Deployment
+     │
+     ▼
+Operations
+     │
+     ▼
+Retirement
+```
+
+Security activities should be associated with each stage.
+
+---
+
+# 7. Security in the Planning Stage
+
+Security should begin before code is written.
+
+Activities include:
+
+- Security requirements
+- Risk assessment
+- Threat modeling
+- Data classification
+- Compliance requirements
+- Authentication requirements
+- Authorization requirements
+- Privacy considerations
+- Security architecture
+
+Example:
+
+```text
+Business Requirement
+       │
+       ▼
+Security Requirement
+       │
+       ▼
+Architecture Decision
+       │
+       ▼
+Implementation
+```
+
+---
+
+# 8. Threat Modeling
+
+Threat modeling asks:
+
+> **"How could this system be attacked, and what can we do about those threats?"**
+
+A simplified process is:
+
+```text
+System
+  │
+  ▼
+Identify Assets
+  │
+  ▼
+Identify Entry Points
+  │
+  ▼
+Identify Threats
+  │
+  ▼
+Assess Risk
+  │
+  ▼
+Define Mitigations
+  │
+  ▼
+Implement Controls
+```
+
+Threat modeling can identify security requirements before implementation.
+
+Common approaches include STRIDE and attack-tree analysis.
+
+---
+
+# 9. Security Architecture
+
+Security architecture considers how components interact.
+
+Example:
+
+```text
+Internet
+   │
+   ▼
+WAF / CDN
+   │
+   ▼
+API Gateway
+   │
+   ▼
+Application
+   │
+   ├──────────► Authentication
+   │
+   ├──────────► Authorization
+   │
+   ▼
+Database
+```
+
+Security architecture should address:
+
+- Trust boundaries
+- Identity
+- Network segmentation
+- Encryption
+- Secrets
+- Data protection
+- Logging
+- Monitoring
+- Availability
+- Failure behavior
+
+---
+
+# 10. Secure Coding
+
+Developers should implement security controls directly in application code.
+
+Important areas include:
+
+- Input validation
+- Output encoding
+- Authentication
+- Authorization
+- Session management
+- Error handling
+- Secure cryptography
+- Secure file handling
+- Secure API design
+- Dependency management
+
+Security should not rely entirely on scanners.
+
+> **Automated tools find many problems, but secure design and secure coding prevent them from being introduced.**
+
+---
+
+# 11. Source Code Security
+
+Source code can be analyzed using SAST.
 
 ```text
 Source Code
      │
      ▼
-Application Build
+    SAST
      │
      ▼
-Dockerfile
+Security Findings
      │
      ▼
-Container Image
-     │
-     ▼
-Container Scan
-     │
-     ├───────────────┐
-     │               │
-     ▼               ▼
- Vulnerabilities   Misconfiguration
-     │               │
-     └───────┬───────┘
-             ▼
-       Security Gate
-             │
-       ┌─────┴─────┐
-       │           │
-      FAIL        PASS
-       │           │
-       ▼           ▼
-     Stop       Push Image
-     Build          │
-                    ▼
-                Registry
-                    │
-                    ▼
-                Deployment
+Developer Fix
 ```
 
----
+Common SAST capabilities include detection of:
 
-# 🎯 Why Container Scanning Is Important
-
-A container image can contain many components besides your application.
-
-For example:
-
-```text
-Container Image
-│
-├── Application
-│
-├── Application Dependencies
-│
-├── Runtime
-│
-├── OS Packages
-│
-├── System Libraries
-│
-├── Configuration
-│
-└── Other Files
-```
-
-Any of these components can contain vulnerabilities.
-
-For example:
-
-```text
-Application
-    │
-    └── Uses Java 21
-            │
-            └── Uses Maven dependencies
-                    │
-                    └── Uses Linux base image
-                            │
-                            └── Contains OS packages
-```
-
-A vulnerability in any layer can potentially introduce risk.
-
----
-
-# 🏗️ Container Image Layers
-
-Container images are generally composed of multiple filesystem layers.
-
-For example:
-
-```text
-┌───────────────────────────────┐
-│       Application Layer       │
-├───────────────────────────────┤
-│       Dependency Layer        │
-├───────────────────────────────┤
-│       Runtime Layer           │
-├───────────────────────────────┤
-│       OS Package Layer        │
-├───────────────────────────────┤
-│       Base Image              │
-└───────────────────────────────┘
-```
-
-A scanner can analyze these layers to identify vulnerable packages and components.
-
----
-
-# 🔍 What Does Container Scanning Detect?
-
-Container scanning can identify several categories of security problems.
-
-## 1. OS Package Vulnerabilities
-
-The base image may contain vulnerable packages.
-
-Examples:
-
-```text
-Ubuntu
-Debian
-Alpine
-Red Hat UBI
-Amazon Linux
-```
-
-A scanner may report:
-
-```text
-Package: openssl
-Version: x.y.z
-Severity: HIGH
-CVE: CVE-XXXX-XXXXX
-Fixed Version: x.y.z+1
-```
-
----
-
-## 2. Application Dependency Vulnerabilities
-
-Container scanning can sometimes identify application dependencies embedded inside the image.
-
-For example:
-
-```text
-Application
-    │
-    ├── Spring Framework
-    ├── Jackson
-    ├── Log4j
-    └── Other Libraries
-```
-
-For dedicated dependency analysis, however, **SCA should normally be used as well**.
+- Injection patterns
+- Unsafe APIs
+- Weak cryptography
+- Security-sensitive coding errors
+- Dangerous data flows
+- Hardcoded credentials
+- Insecure configuration
 
 See:
 
-**[`sca.md`](sca.md)**
+**[`sast.md`](sast.md)**
 
 ---
 
-# 3. Base Image Vulnerabilities
+# 12. Secrets Security
 
-The base image is one of the most important parts of container security.
-
-Example:
-
-```dockerfile
-FROM ubuntu:22.04
-```
-
-If the base image contains vulnerable packages, the resulting application image can inherit those vulnerabilities.
-
-Therefore:
-
-> **Keep base images updated and use trusted, minimal base images.**
-
----
-
-# 4. Misconfiguration
-
-Some container scanners can identify insecure configurations.
+Secrets should never be committed into source repositories.
 
 Examples include:
-
-* Running as root
-* Excessive privileges
-* Insecure Dockerfile instructions
-* Missing health checks
-* Writable sensitive directories
-* Unnecessary packages
-* Insecure file permissions
-
-Example:
-
-```dockerfile
-USER root
-```
-
-Running an application as root may increase the impact of a container compromise.
-
-Prefer:
-
-```dockerfile
-USER appuser
-```
-
-when practical.
-
----
-
-# 5. Secrets
-
-A container image may accidentally contain:
 
 ```text
 API Keys
 Passwords
+Cloud Credentials
 Private Keys
 Tokens
-Cloud Credentials
+Database Credentials
 Certificates
 ```
 
-Example:
+A DevSecOps pipeline can use secrets scanning:
 
-```dockerfile
-COPY application.properties /app/
+```text
+Git Commit
+    │
+    ▼
+Secrets Scan
+    │
+    ├── Secret Found ──► Block
+    │
+    └── Clean ─────────► Continue
 ```
 
-If `application.properties` contains credentials, those credentials may become part of the image.
-
-Secrets should instead be injected securely at runtime.
+Dedicated secrets scanning should complement secure secret storage and runtime secret injection.
 
 See:
 
@@ -256,280 +458,909 @@ See:
 
 ---
 
-# 6. Malware and Suspicious Files
+# 13. Dependency Security
 
-Some security platforms can also identify suspicious files or known malware signatures.
-
-This capability depends on the scanner.
-
----
-
-# 🐳 Dockerfile Security
-
-Container security begins before the image is built.
-
-A Dockerfile should follow secure development practices.
-
-## Avoid
-
-```dockerfile
-FROM ubuntu:latest
-
-RUN apt-get update
-RUN apt-get install -y curl
-
-COPY . /app
-
-USER root
-
-CMD ["./application"]
-```
-
-Problems may include:
-
-* Mutable `latest` tag
-* Excess packages
-* Root execution
-* Large build context
-* Potentially unnecessary files
-* Lack of dependency cleanup
-
----
-
-# ✅ Better Approach
-
-```dockerfile
-FROM eclipse-temurin:21-jre
-
-WORKDIR /app
-
-COPY target/application.jar application.jar
-
-RUN useradd --system --create-home appuser
-
-USER appuser
-
-ENTRYPOINT ["java", "-jar", "application.jar"]
-```
-
-The exact base image and user-management commands depend on the chosen distribution.
-
-The important principles are:
-
-* Use a trusted base image
-* Minimize installed packages
-* Run as a non-root user
-* Copy only required artifacts
-* Avoid unnecessary files
-* Keep the image small
-* Update dependencies regularly
-
----
-
-# 📦 Minimal Images
-
-Smaller images generally have fewer packages and therefore potentially fewer components that can contain vulnerabilities.
-
-A common progression is:
-
-```text
-Large OS Image
-      │
-      ▼
-Minimal OS Image
-      │
-      ▼
-Distroless Image
-      │
-      ▼
-Application + Required Runtime Only
-```
-
-However, smaller does not automatically mean secure.
-
-The image must still be:
-
-* Supported
-* Maintained
-* Patched
-* Compatible with the application
-* Scanned
-
----
-
-# 🏷️ Image Tags
-
-Avoid relying only on mutable tags such as:
-
-```text
-latest
-```
-
-Prefer controlled versioning:
-
-```text
-myapp:1.4.2
-```
-
-or immutable image digests:
-
-```text
-myapp@sha256:<digest>
-```
-
-This improves reproducibility and helps ensure that the exact image tested is the image deployed.
-
----
-
-# 🔐 Container Image Registry
-
-A typical secure flow is:
-
-```text
-Developer
-    │
-    ▼
-Git Repository
-    │
-    ▼
-CI Pipeline
-    │
-    ▼
-Build Image
-    │
-    ▼
-Scan Image
-    │
-    ▼
-Security Gate
-    │
-    ▼
-Container Registry
-    │
-    ▼
-Deployment
-```
-
-Examples of container registries include:
-
-* GitHub Container Registry
-* Amazon Elastic Container Registry
-* Azure Container Registry
-* Google Artifact Registry
-* Docker Hub
-* Harbor
-
----
-
-# 🚦 Container Security Gate
-
-The scanner produces findings.
-
-The CI/CD pipeline can use those findings to decide whether the image should continue.
+Modern applications depend on third-party libraries.
 
 Example:
 
 ```text
+Application
+    │
+    ├── Framework
+    ├── Authentication Library
+    ├── HTTP Client
+    ├── Logging Library
+    └── Database Driver
+```
+
+A vulnerability in a dependency can affect the application.
+
+SCA helps identify:
+
+- Vulnerable dependencies
+- Transitive dependencies
+- Known CVEs
+- Outdated components
+- License risks
+- Dependency relationships
+
+See:
+
+**[`sca.md`](sca.md)**
+
+---
+
+# 14. Container Security
+
+Applications are increasingly packaged as containers.
+
+A container may contain:
+
+```text
+Application
+   +
+Runtime
+   +
+Libraries
+   +
+OS Packages
+   +
+Configuration
+```
+
+Container scanning can identify vulnerabilities and misconfigurations.
+
+```text
+Container Build
+      │
+      ▼
 Container Scan
       │
       ▼
-Findings?
-      │
-      ▼
-┌─────────────────────┐
-│ Severity Evaluation │
-└──────────┬──────────┘
-           │
-     ┌─────┼───────────┐
-     │     │           │
-     ▼     ▼           ▼
-    LOW  MEDIUM    HIGH/CRITICAL
-     │     │           │
-     ▼     ▼           ▼
-   Warn  Review        FAIL
-                       │
-                       ▼
-                   Stop Build
+Security Gate
 ```
 
-A production organization should define these thresholds explicitly.
+See:
+
+**[`container-scanning.md`](container-scanning.md)**
+
+---
+
+# 15. Dynamic Application Security Testing
+
+DAST tests the application while it is running.
+
+```text
+Application
+     │
+     ▼
+Deploy to Test
+     │
+     ▼
+DAST
+     │
+     ├── Crawl
+     ├── Passive Scan
+     ├── Active Scan
+     └── API Testing
+     │
+     ▼
+Security Findings
+```
+
+DAST can identify runtime weaknesses that may not be visible through source-code analysis.
+
+See:
+
+**[`dast.md`](dast.md)**
+
+---
+
+# 16. Core DevSecOps Security Controls
+
+A practical DevSecOps program commonly combines:
+
+| Security Control | Main Question |
+|---|---|
+| Threat Modeling | How could the system be attacked? |
+| Secure Coding | Is the application designed and coded securely? |
+| SAST | Is the source code vulnerable? |
+| Secrets Scanning | Did someone expose a credential? |
+| SCA | Are dependencies vulnerable? |
+| IaC Scanning | Is infrastructure configuration insecure? |
+| Container Scanning | Is the image vulnerable or misconfigured? |
+| SBOM | What components are inside the software? |
+| DAST | Is the running application vulnerable? |
+| Penetration Testing | Can a skilled attacker exploit the system? |
+| Runtime Monitoring | What is happening in production? |
+
+---
+
+# 17. DevSecOps CI/CD Pipeline
+
+A complete pipeline can look like:
+
+```text
+                         Developer
+                             │
+                             ▼
+                         Git Push
+                             │
+                             ▼
+                    ┌─────────────────┐
+                    │ Secrets Scanning│
+                    └────────┬────────┘
+                             │
+                             ▼
+                           SAST
+                             │
+                             ▼
+                            SCA
+                             │
+                             ▼
+                           Build
+                             │
+                             ▼
+                       Unit Tests
+                             │
+                             ▼
+                    Container Build
+                             │
+                             ▼
+                  Container Scanning
+                             │
+                             ▼
+                           SBOM
+                             │
+                             ▼
+                       Security Gate
+                             │
+                             ▼
+                       Push Artifact
+                             │
+                             ▼
+                     Deploy to Test
+                             │
+                             ▼
+                            DAST
+                             │
+                             ▼
+                       Security Gate
+                             │
+                             ▼
+                         Staging
+                             │
+                             ▼
+                    Approval / Policy
+                             │
+                             ▼
+                       Production
+                             │
+                             ▼
+                 Monitor / Respond / Improve
+```
+
+---
+
+# 18. Pull Request Security
+
+A pull request is an excellent place for fast security feedback.
+
+Typical checks:
+
+```text
+Pull Request
+     │
+     ├── Secrets Scan
+     ├── SAST
+     ├── SCA
+     ├── IaC Scan
+     └── Unit / Security Tests
+```
+
+The goal is fast feedback.
+
+A developer should ideally learn about a security problem before the change is merged.
+
+---
+
+# 19. Build-Time Security
+
+During the build:
+
+```text
+Source
+  │
+  ▼
+Compile
+  │
+  ├── Dependency Check
+  ├── SCA
+  ├── SAST
+  └── Security Tests
+  │
+  ▼
+Artifact
+```
+
+Artifacts may include:
+
+- JAR files
+- WAR files
+- NPM packages
+- Python packages
+- Container images
+- Binary artifacts
+
+---
+
+# 20. Artifact Security
+
+The artifact produced by CI/CD should be treated as a security-sensitive object.
+
+A mature supply chain can look like:
+
+```text
+Source
+  │
+  ▼
+Build
+  │
+  ▼
+Test
+  │
+  ▼
+Scan
+  │
+  ▼
+SBOM
+  │
+  ▼
+Sign
+  │
+  ▼
+Registry
+  │
+  ▼
+Verify
+  │
+  ▼
+Deploy
+```
+
+This creates stronger confidence that the artifact being deployed is the artifact that was built and approved.
+
+---
+
+# 21. Software Supply Chain Security
+
+Modern software depends on many external components:
+
+```text
+Developer
+   │
+   ▼
+Source Repository
+   │
+   ├── Dependencies
+   ├── Build Tools
+   ├── CI/CD Actions
+   ├── Container Images
+   └── External Services
+```
+
+Each dependency creates potential supply-chain risk.
+
+Important controls include:
+
+- Dependency pinning
+- Dependency scanning
+- Trusted package repositories
+- SBOM
+- Artifact signing
+- Provenance
+- Protected CI/CD
+- Least privilege
+- Secrets protection
+
+---
+
+# 22. SBOM
+
+**SBOM = Software Bill of Materials**
+
+An SBOM describes the components contained in software.
+
+Example:
+
+```text
+Application
+│
+├── Java 21
+├── Spring Framework
+├── Jackson
+├── PostgreSQL Driver
+├── OpenSSL
+└── Linux Packages
+```
+
+Common SBOM formats include:
+
+- SPDX
+- CycloneDX
+
+SBOMs improve visibility and vulnerability response.
+
+---
+
+# 23. Artifact Signing
+
+Scanning answers:
+
+> **"Does this artifact contain known security problems?"**
+
+Signing answers:
+
+> **"Can I verify where this artifact came from and whether it was altered?"**
+
+A secure flow is:
+
+```text
+Build
+  │
+  ▼
+Scan
+  │
+  ▼
+SBOM
+  │
+  ▼
+Sign
+  │
+  ▼
+Registry
+  │
+  ▼
+Verify
+  │
+  ▼
+Deploy
+```
+
+Tools such as Sigstore Cosign can be used for container image signing and verification.
+
+---
+
+# 24. Infrastructure as Code Security
+
+Infrastructure can also contain security vulnerabilities.
+
+Examples:
+
+```text
+Terraform
+CloudFormation
+Kubernetes YAML
+Helm
+Ansible
+```
+
+Example:
+
+```yaml
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+    - name: app
+      securityContext:
+        privileged: true
+```
+
+IaC scanning can identify insecure configurations before deployment.
+
+Typical tools include:
+
+- Checkov
+- Trivy
+- tfsec
+- KICS
+
+---
+
+# 25. Kubernetes Security
+
+For Kubernetes environments, DevSecOps should consider:
+
+```text
+Source
+  │
+  ▼
+Container
+  │
+  ▼
+Kubernetes Manifest
+  │
+  ▼
+Admission Policy
+  │
+  ▼
+Cluster
+  │
+  ▼
+Runtime
+```
+
+Security areas include:
+
+- Pod security
+- RBAC
+- Network policies
+- Secrets
+- Service accounts
+- Image security
+- Admission controls
+- Resource limits
+- Runtime monitoring
+
+---
+
+# 26. Cloud Security
+
+DevSecOps extends into cloud environments.
+
+```text
+Application
+     │
+     ▼
+Cloud Infrastructure
+     │
+     ├── IAM
+     ├── Network
+     ├── Storage
+     ├── Compute
+     └── Managed Services
+```
+
+Security should cover:
+
+- IAM
+- Least privilege
+- Network security
+- Encryption
+- Logging
+- Monitoring
+- Configuration management
+- Cloud security posture
+
+---
+
+# 27. Identity and Access Management
+
+Identity is a major DevSecOps concern.
+
+The principle is:
+
+> **Give users, applications, pipelines, and services only the permissions they need.**
+
+Example:
+
+```text
+Developer
+   │
+   ├── Source Repository
+   └── Development Environment
+
+CI/CD
+   │
+   ├── Build Registry
+   └── Deployment Target
+
+Production Service
+   │
+   └── Required Production Resources
+```
+
+Avoid:
+
+```text
+CI/CD
+  │
+  └── Administrator Everywhere
+```
+
+---
+
+# 28. Secrets Management
+
+Secrets should be stored in dedicated secret-management systems rather than source code.
+
+Examples include:
+
+- HashiCorp Vault
+- AWS Secrets Manager
+- Azure Key Vault
+- Google Secret Manager
+- Kubernetes Secrets with appropriate protection
+
+Typical flow:
+
+```text
+Application
+     │
+     ▼
+Secret Request
+     │
+     ▼
+Secret Manager
+     │
+     ▼
+Credential
+     │
+     ▼
+Application
+```
+
+The secret should not need to be committed into Git.
+
+---
+
+# 29. Security Testing Strategy
+
+A mature DevSecOps program uses multiple testing layers:
+
+```text
+                   SECURITY TESTING
+                         │
+       ┌─────────────────┼─────────────────┐
+       │                 │                 │
+       ▼                 ▼                 ▼
+     STATIC           DYNAMIC           MANUAL
+       │                 │                 │
+       ▼                 ▼                 ▼
+     SAST               DAST           Pentest
+       │                 │                 │
+       └─────────────────┼─────────────────┘
+                         │
+                         ▼
+                   Risk Assessment
+```
+
+No single scanner can identify every vulnerability.
+
+---
+
+# 30. Security Gates
+
+Security findings become meaningful when they influence delivery decisions.
+
+Example:
+
+```text
+Security Scan
+      │
+      ▼
+Findings
+      │
+      ▼
+Risk Evaluation
+      │
+ ┌────┴───────────────┐
+ │                    │
+PASS                  FAIL
+ │                    │
+ ▼                    ▼
+Continue           Stop Pipeline
+```
+
+---
+
+# 31. Risk-Based Security Gates
+
+A mature organization should avoid:
+
+```text
+Any Finding = Build Failure
+```
+
+Instead:
+
+```text
+Finding
+   │
+   ▼
+Severity
+   +
+Exploitability
+   +
+Exposure
+   +
+Business Impact
+   +
+Compensating Controls
+   +
+Fix Availability
+   │
+   ▼
+Risk Decision
+```
 
 For example:
 
 ```text
-CRITICAL vulnerability
+Critical + Exploitable
         │
         ▼
-Pipeline FAIL
+       FAIL
+
+
+Low + No Exploit Path
+        │
+        ▼
+      Review
 ```
 
-Another organization may allow a vulnerability if:
-
-* There is no available fix
-* It is not exploitable in the application's environment
-* A compensating control exists
-* The risk has been formally accepted
-
-Security gates should therefore be **risk-based**, not blindly scanner-based.
+Exact thresholds should be defined by organizational policy.
 
 ---
 
-# 🛠️ Popular Container Scanning Tools
+# 32. Vulnerability Management
 
-Some commonly used tools include:
+Finding a vulnerability is only the beginning.
 
-| Tool           | Primary Use                                                        |
-| -------------- | ------------------------------------------------------------------ |
-| Trivy          | Vulnerability, configuration, secret and related security scanning |
-| Grype          | Container and filesystem vulnerability scanning                    |
-| Docker Scout   | Container image analysis and supply-chain insights                 |
-| Clair          | Container vulnerability analysis                                   |
-| Anchore        | Container and software supply-chain security                       |
-| Snyk Container | Container vulnerability management                                 |
-| Prisma Cloud   | Cloud-native and container security                                |
-| Aqua Security  | Container and cloud-native security                                |
+A complete process is:
 
-The best tool depends on the organization's ecosystem and security requirements.
+```text
+Discover
+   │
+   ▼
+Validate
+   │
+   ▼
+Prioritize
+   │
+   ▼
+Assign
+   │
+   ▼
+Remediate
+   │
+   ▼
+Verify
+   │
+   ▼
+Close
+```
+
+A vulnerability should have an owner and a defined remediation path.
 
 ---
 
-# 🔎 Trivy
+# 33. Vulnerability Severity
 
-Trivy is a popular open-source security scanner.
+Common severity considerations include:
 
-It can scan:
+- Criticality
+- Exploitability
+- Internet exposure
+- Business impact
+- Data sensitivity
+- Availability of a fix
+- Compensating controls
+- Environment
 
-* Container images
-* Filesystems
-* Git repositories
-* Kubernetes configurations
-* Infrastructure-as-Code
-* Vulnerabilities
-* Secrets
-* Misconfigurations
+CVSS can help standardize vulnerability severity, but the score should not be treated as the only risk signal.
+
+---
+
+# 34. False Positives
+
+Security scanners can produce false positives.
+
+Process:
+
+```text
+Finding
+   │
+   ▼
+Validate
+   │
+   ├── True Positive ──► Remediate
+   │
+   └── False Positive ─► Document / Suppress
+```
+
+Suppressions should be:
+
+- Justified
+- Reviewed
+- Traceable
+- Time-bound where appropriate
+
+---
+
+# 35. Developer Experience
+
+DevSecOps should not become:
+
+> "Security blocks every deployment."
+
+Instead:
+
+```text
+Scanner
+   │
+   ▼
+Actionable Finding
+   │
+   ├── What is wrong?
+   ├── Where is it?
+   ├── Why does it matter?
+   └── How do I fix it?
+```
+
+Good security tooling should provide developers with useful feedback.
+
+---
+
+# 36. Security Champions
+
+A **Security Champion** is typically a developer or engineer who helps promote security practices within a development team.
 
 Example:
 
-```bash
-trivy image myapp:1.0.0
+```text
+                Security Team
+                      │
+                      ▼
+              Security Champions
+                /      |      \
+               /       |       \
+              ▼        ▼        ▼
+           Team A    Team B    Team C
 ```
 
-Example with severity filtering:
+Security Champions can help:
 
-```bash
-trivy image --severity HIGH,CRITICAL myapp:1.0.0
-```
-
-A CI pipeline can use the scanner's exit code to determine whether the build should fail.
+- Review security findings
+- Promote secure coding
+- Coordinate with security teams
+- Participate in threat modeling
+- Improve developer awareness
 
 ---
 
-# 🔄 Container Scanning in GitHub Actions
+# 37. Security Culture
 
-A simplified GitHub Actions workflow can look like:
+Technology alone does not create DevSecOps.
+
+A successful program requires:
+
+```text
+People
+  +
+Process
+  +
+Technology
+```
+
+Teams should understand:
+
+> **Security is everyone's responsibility.**
+
+Development, security, operations, architecture, and platform teams should collaborate rather than operate as isolated silos.
+
+---
+
+# 38. DevSecOps Tools
+
+A typical tool landscape includes:
+
+| Area | Example Tools |
+|---|---|
+| Source Control | GitHub, GitLab, Bitbucket |
+| CI/CD | GitHub Actions, Jenkins, GitLab CI, Azure DevOps |
+| SAST | CodeQL, Semgrep, SonarQube |
+| DAST | OWASP ZAP, Burp Suite, Invicti, StackHawk |
+| SCA | Dependabot, Snyk, OWASP Dependency-Check |
+| Secrets | Gitleaks, GitHub Secret Scanning |
+| Container Security | Trivy, Grype, Docker Scout |
+| IaC Security | Checkov, Trivy, KICS |
+| SBOM | Syft, CycloneDX |
+| Image Signing | Cosign |
+| Secrets Management | Vault, AWS Secrets Manager, Azure Key Vault |
+| Kubernetes Security | Kyverno, OPA Gatekeeper, Trivy |
+| Monitoring | Prometheus, Grafana, SIEM platforms |
+
+Tool selection should be based on requirements rather than simply choosing the largest number of security tools.
+
+---
+
+# 39. GitHub Actions DevSecOps Pipeline
+
+A practical GitHub Actions architecture might be:
+
+```text
+Pull Request
+     │
+     ├── Secrets Scan
+     ├── SAST
+     ├── SCA
+     ├── IaC Scan
+     └── Tests
+     │
+     ▼
+    Merge
+     │
+     ▼
+    Build
+     │
+     ├── Container Build
+     ├── Container Scan
+     └── SBOM
+     │
+     ▼
+ Security Gate
+     │
+     ▼
+ Push Artifact
+     │
+     ▼
+ Deploy Test
+     │
+     ▼
+    DAST
+     │
+     ▼
+ Security Gate
+     │
+     ▼
+   Staging
+     │
+     ▼
+ Approval / Policy
+     │
+     ▼
+ Production
+```
+
+---
+
+# 40. Example GitHub Actions Structure
+
+A repository could organize security workflows like:
+
+```text
+.github/
+└── workflows/
+    ├── ci.yml
+    ├── sast.yml
+    ├── sca.yml
+    ├── secrets.yml
+    ├── container-scan.yml
+    ├── dast.yml
+    └── security.yml
+```
+
+Alternatively, related checks can be consolidated into fewer workflows.
+
+The important thing is that the security controls are:
+
+- Version controlled
+- Repeatable
+- Automated
+- Reviewable
+- Auditable
+
+---
+
+# 41. DevSecOps Pipeline Example
+
+A conceptual workflow:
 
 ```yaml
-name: Container Security
+name: DevSecOps
 
 on:
   pull_request:
@@ -538,725 +1369,1229 @@ on:
       - main
 
 jobs:
-  container-scan:
+
+  secrets:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - name: Secrets scan
+        run: echo "Run secrets scanner"
 
-      - name: Build image
-        run: |
-          docker build -t myapp:${{ github.sha }} .
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: SAST
+        run: echo "Run SAST"
 
-      - name: Scan image
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: myapp:${{ github.sha }}
-          format: table
-          severity: HIGH,CRITICAL
-          exit-code: '1'
+  sca:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: SCA
+        run: echo "Run dependency scan"
+
+  build:
+    needs:
+      - secrets
+      - sast
+      - sca
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: echo "Build application"
+
+  container:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build container
+        run: docker build -t myapp:${{ github.sha }} .
+
+      - name: Container scan
+        run: echo "Run container scanner"
+
+  deploy-test:
+    needs: container
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: echo "Deploy to test environment"
+
+  dast:
+    needs: deploy-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: DAST
+        run: echo "Run DAST"
 ```
 
-The important concept is:
+This is a conceptual example. Production workflows should use approved security actions and pin third-party actions according to organizational supply-chain policy.
+
+---
+
+# 42. CI/CD Security
+
+The CI/CD system itself is part of the attack surface.
+
+A compromised pipeline could:
 
 ```text
-Build
+Source
   │
   ▼
-Scan
+CI/CD
   │
   ▼
-HIGH / CRITICAL?
-  │
- ┌┴─────────┐
- │          │
-YES         NO
- │          │
- ▼          ▼
-FAIL       PASS
-```
-
-For production repositories, pin actions to trusted immutable versions or commit SHAs according to your organization's supply-chain policy rather than blindly using floating references.
-
----
-
-# 🧪 Example Pipeline
-
-A more complete pipeline could look like:
-
-```text
-                    Pull Request
-                         │
-                         ▼
-                  Secrets Scanning
-                         │
-                         ▼
-                        SAST
-                         │
-                         ▼
-                        SCA
-                         │
-                         ▼
-                       Build
-                         │
-                         ▼
-                  Build Container
-                         │
-                         ▼
-                Container Scanning
-                         │
-                         ▼
-                   Security Gate
-                         │
-                    ┌────┴────┐
-                    │         │
-                   FAIL      PASS
-                    │         │
-                    ▼         ▼
-                  Stop      Push Image
-                              │
-                              ▼
-                         Container Registry
-                              │
-                              ▼
-                           Deploy
-```
-
----
-
-# 🔐 Container Signing
-
-Scanning answers:
-
-> **"Does this image contain known security problems?"**
-
-Signing answers a different question:
-
-> **"Can I verify that this is the image produced by a trusted build process?"**
-
-A modern container supply chain can therefore look like:
-
-```text
-Build
+Malicious Artifact
   │
   ▼
-Scan
-  │
-  ▼
-Generate SBOM
-  │
-  ▼
-Sign Image
-  │
-  ▼
-Push Registry
-  │
-  ▼
-Verify During Deployment
+Production
 ```
 
-Tools such as **Sigstore Cosign** can be used for container image signing and verification.
+Therefore, protect:
+
+- Workflow files
+- Runner infrastructure
+- Secrets
+- Tokens
+- Service accounts
+- Build artifacts
+- Package repositories
+- Deployment credentials
 
 ---
 
-# 📋 SBOM
+# 43. CI/CD Least Privilege
 
-**SBOM = Software Bill of Materials**
-
-An SBOM describes the components contained in software.
-
-For a container, this could include:
-
-```text
-Container Image
-│
-├── Base OS
-│
-├── OS Packages
-│
-├── Application Runtime
-│
-├── Application Libraries
-│
-└── Application Components
-```
-
-An SBOM makes it easier to answer:
-
-> "Which applications contain this vulnerable component?"
-
-Common SBOM formats include:
-
-* SPDX
-* CycloneDX
-
-SBOM generation can be integrated into CI/CD.
-
----
-
-# 🔄 Continuous Container Scanning
-
-Scanning only during image creation is not enough.
-
-Consider:
-
-```text
-Day 1
-Image built
-     │
-     ▼
-No known vulnerabilities
-```
-
-Later:
-
-```text
-Day 30
-New CVE published
-     │
-     ▼
-Existing image becomes vulnerable
-```
-
-Therefore:
-
-```text
-Build-Time Scan
-       +
-Registry Monitoring
-       +
-Continuous Vulnerability Management
-```
-
-should be considered for production environments.
-
----
-
-# ⚠️ Common Container Security Mistakes
-
-## 1. Using `latest`
-
-```dockerfile
-FROM ubuntu:latest
-```
-
-This makes builds less predictable.
-
----
-
-## 2. Running as root
-
-```dockerfile
-USER root
-```
-
-Use a dedicated non-root user whenever possible.
-
----
-
-## 3. Ignoring scanner findings
-
-A scan is useful only when findings are reviewed and remediated.
-
----
-
-## 4. Scanning only the application
-
-The base image and operating-system packages also matter.
-
----
-
-## 5. Using outdated base images
-
-A secure application can still inherit vulnerabilities from an old base image.
-
----
-
-## 6. Putting secrets inside images
-
-Never bake credentials into an image.
+A pipeline should receive only the permissions it needs.
 
 Bad:
 
-```dockerfile
-ENV DATABASE_PASSWORD=secret123
+```text
+CI/CD
+  │
+  └── Full Cloud Administrator
 ```
 
 Better:
 
 ```text
-Container
+Build Job
+  └── Read Source
+
+Image Job
+  └── Push Registry
+
+Deployment Job
+  └── Deploy Specific Application
+```
+
+This reduces blast radius if a job is compromised.
+
+---
+
+# 44. Branch Protection
+
+Security-sensitive repositories should protect important branches.
+
+Controls can include:
+
+- Pull requests
+- Required reviews
+- Required status checks
+- Restricted direct pushes
+- Signed commits where appropriate
+- CODEOWNERS
+- Security checks
+
+Example:
+
+```text
+Developer
    │
    ▼
-Runtime Secret
+Pull Request
    │
-   ├── Kubernetes Secret
-   ├── Cloud Secret Manager
-   └── External Secrets System
+   ├── Review
+   ├── SAST
+   ├── SCA
+   ├── Secrets
+   └── Tests
+   │
+   ▼
+Approved
+   │
+   ▼
+Merge
 ```
 
 ---
 
-## 7. Installing unnecessary packages
+# 45. Policy as Code
 
-Every additional package increases the attack surface.
+Security policies can be expressed as code.
 
----
-
-## 8. Ignoring false positives
-
-Scanner output must be validated.
-
-Not every finding represents an exploitable vulnerability in the actual application environment.
-
----
-
-# 🧠 Container Scanning vs SCA
-
-These two controls are related but not identical.
-
-| Area                     | Container Scanning       | SCA                   |
-| ------------------------ | ------------------------ | --------------------- |
-| Primary Target           | Container image          | Software dependencies |
-| OS Packages              | Yes                      | Usually no            |
-| Application Dependencies | Often                    | Yes                   |
-| Base Image               | Yes                      | No                    |
-| Dependency Tree          | Limited / tool-dependent | Strong                |
-| License Analysis         | Tool-dependent           | Common                |
-| Dockerfile Configuration | Tool-dependent           | No                    |
-| Runtime Image            | Yes                      | No                    |
-
-A strong DevSecOps pipeline can use both.
+Example concept:
 
 ```text
-Application Source
-       │
-       ├──────────► SCA
-       │
-       ▼
-    Container
-       │
-       └──────────► Container Scan
+Policy
+  │
+  ├── No privileged containers
+  ├── Images must be scanned
+  ├── Critical vulnerabilities blocked
+  ├── Production deployments require approval
+  └── Only approved registries allowed
 ```
+
+Policy-as-code provides:
+
+- Version control
+- Automation
+- Repeatability
+- Auditability
+- Consistency
+
+Common policy technologies include:
+
+- Open Policy Agent (OPA)
+- Rego
+- Kyverno
 
 ---
 
-# 🧠 Container Scanning vs SAST
+# 46. Continuous Monitoring
 
-These also solve different problems.
+Security does not end at deployment.
+
+Production should be monitored for:
+
+- Suspicious activity
+- Vulnerability exposure
+- Authentication anomalies
+- Unauthorized changes
+- Configuration drift
+- Runtime threats
+- Service abuse
+
+Conceptually:
 
 ```text
-Source Code
-     │
-     └──────► SAST
-                  │
-                  ▼
-           Code Vulnerabilities
-
-
-Container Image
-     │
-     └──────► Container Scan
-                  │
-                  ▼
-          Image Vulnerabilities
+Production
+    │
+    ▼
+Monitoring
+    │
+    ▼
+Security Events
+    │
+    ▼
+Detection
+    │
+    ▼
+Response
+    │
+    ▼
+Improvement
 ```
 
-Example:
+---
+
+# 47. Runtime Security
+
+Build-time security cannot detect every runtime threat.
+
+Runtime controls may include:
+
+- WAF
+- IDS/IPS
+- Runtime container security
+- Endpoint security
+- SIEM
+- EDR
+- Network monitoring
+- Application monitoring
+
+The goal is defense in depth.
+
+---
+
+# 48. Incident Response
+
+When a security event occurs:
 
 ```text
-SAST:
-"Your application constructs an unsafe SQL query."
-
-Container Scan:
-"Your container contains a vulnerable OpenSSL package."
+Detect
+  │
+  ▼
+Analyze
+  │
+  ▼
+Contain
+  │
+  ▼
+Eradicate
+  │
+  ▼
+Recover
+  │
+  ▼
+Learn
+  │
+  ▼
+Improve Controls
 ```
 
-Both findings are important, but they require different remediation.
-
----
-
-# 🧠 Container Scanning vs DAST
-
-DAST works against the running application.
-
-Container scanning works primarily against the image and its contents.
-
-```text
-Container Image
-      │
-      ▼
-Container Scan
-      │
-      ▼
-Image Security
-```
-
-versus:
-
-```text
-Running Application
-      │
-      ▼
-DAST
-      │
-      ▼
-Runtime Application Security
-```
-
-Therefore, these controls complement each other.
-
----
-
-# 🏗️ Recommended Container Security Lifecycle
-
-A mature approach looks like:
-
-```text
-1. Choose Trusted Base Image
-             │
-             ▼
-2. Build Minimal Image
-             │
-             ▼
-3. Run as Non-Root
-             │
-             ▼
-4. Scan Image
-             │
-             ▼
-5. Generate SBOM
-             │
-             ▼
-6. Apply Security Gate
-             │
-             ▼
-7. Sign Image
-             │
-             ▼
-8. Push to Registry
-             │
-             ▼
-9. Verify Before Deployment
-             │
-             ▼
-10. Continuously Monitor
-```
-
----
-
-# 🏆 Best Practices
-
-## Base Image
-
-* Use trusted images.
-* Prefer maintained images.
-* Keep images updated.
-* Avoid unnecessary packages.
-* Consider minimal or distroless images where appropriate.
-* Pin versions or otherwise ensure reproducibility.
-
-## Dockerfile
-
-* Run applications as non-root.
-* Use multi-stage builds where appropriate.
-* Avoid embedding secrets.
-* Minimize the build context.
-* Use `.dockerignore`.
-* Avoid unnecessary tools and packages.
-
-## CI/CD
-
-* Scan every relevant image build.
-* Fail builds based on defined security policies.
-* Generate SBOMs where required.
-* Sign trusted images.
-* Store scan results.
-* Track remediation.
-
-## Registry
-
-* Use access controls.
-* Protect production repositories.
-* Enable vulnerability monitoring where available.
-* Use immutable tags or digests where practical.
-* Restrict who can push images.
-
-## Runtime
-
-* Use least privilege.
-* Restrict container capabilities.
-* Use read-only filesystems where practical.
-* Apply network policies.
-* Monitor runtime behavior.
-* Continuously manage vulnerabilities.
-
----
-
-# 🚀 Production-Grade Container Security
-
-A mature container security architecture can look like:
-
-```text
-                         SOURCE
-                           │
-                           ▼
-                    Git Repository
-                           │
-            ┌──────────────┼──────────────┐
-            │              │              │
-            ▼              ▼              ▼
-          SAST            SCA       Secrets Scan
-            │              │              │
-            └──────────────┼──────────────┘
-                           │
-                           ▼
-                         BUILD
-                           │
-                           ▼
-                    Container Image
-                           │
-                           ▼
-                  Container Scanning
-                           │
-                           ▼
-                        SBOM
-                           │
-                           ▼
-                    Security Gate
-                           │
-                    ┌──────┴──────┐
-                    │             │
-                   FAIL          PASS
-                    │             │
-                    ▼             ▼
-                  Stop       Sign Image
-                                  │
-                                  ▼
-                           Container Registry
-                                  │
-                                  ▼
-                           Admission Policy
-                                  │
-                                  ▼
-                              Kubernetes
-                                  │
-                                  ▼
-                            Running App
-                                  │
-                                  ▼
-                                DAST
-                                  │
-                                  ▼
-                            Monitoring
-```
-
----
-
-# 📊 Container Security Checklist
-
-Before deploying a container image, consider:
-
-* Is the base image trusted?
-* Is the base image maintained?
-* Is the image version controlled?
-* Is the image scanned?
-* Are HIGH and CRITICAL vulnerabilities addressed?
-* Are false positives reviewed?
-* Is the application running as non-root?
-* Are unnecessary packages removed?
-* Are secrets excluded from the image?
-* Is an SBOM generated?
-* Is the image signed?
-* Is the registry secured?
-* Is the image immutable?
-* Is the image continuously monitored?
-* Are runtime security controls enabled?
-
----
-
-# 🎓 Interview Questions
-
-## Beginner
-
-### What is container scanning?
-
-Container scanning is the process of analyzing container images for vulnerabilities, misconfigurations, secrets, and other security risks.
-
-### Why is container scanning required?
-
-Because container images can contain vulnerable OS packages, application dependencies, runtimes, configuration, and other components.
-
-### What is a base image?
-
-A base image provides the initial filesystem and runtime environment from which another container image is built.
-
-### Why should containers not normally run as root?
-
-Running as root can increase the impact of a container compromise because the application has greater privileges inside the container.
-
----
-
-# 🎓 Intermediate
-
-### What is the difference between SCA and container scanning?
-
-SCA focuses primarily on software dependencies, while container scanning examines the container image and can include OS packages, application components, configurations, and other image contents.
-
-### What is a CVE?
-
-A **CVE (Common Vulnerabilities and Exposures)** is a standardized identifier assigned to a publicly known cybersecurity vulnerability.
-
-Example:
-
-```text
-CVE-2026-XXXXX
-```
-
-### What is CVSS?
-
-**CVSS (Common Vulnerability Scoring System)** provides a standardized way to represent the severity of vulnerabilities.
-
-The score should be considered alongside environmental and business context rather than used as the only decision factor.
-
-### Why are minimal images useful?
-
-They reduce the number of components and packages that need to be maintained and potentially attacked.
-
----
-
-# 🎓 Advanced
-
-### Should every HIGH vulnerability fail the pipeline?
-
-Not necessarily.
-
-The decision should consider:
-
-* Exploitability
-* Exposure
-* Business impact
-* Availability of a fix
-* Compensating controls
-* Application context
-* Risk acceptance
-
-### Why scan an image if SCA already scans dependencies?
-
-Because the container contains more than application dependencies.
+DevSecOps creates a feedback loop between incidents and development.
 
 For example:
 
 ```text
-Container
-│
-├── OS packages
-├── Runtime
-├── Application dependencies
-├── Configuration
-└── Other files
+Production Incident
+       │
+       ▼
+Root Cause
+       │
+       ▼
+New Security Test
+       │
+       ▼
+CI/CD Security Gate
+       │
+       ▼
+Future Prevention
 ```
-
-SCA may identify dependency vulnerabilities, while container scanning can identify issues in the broader image.
-
-### Why generate an SBOM?
-
-An SBOM provides visibility into the components contained in software and makes vulnerability tracking and supply-chain analysis easier.
-
-### Why sign container images?
-
-Signing helps establish provenance and allows deployment systems to verify that an image originated from a trusted source and has not been replaced or tampered with.
 
 ---
 
-# 📌 Quick Reference
+# 49. Compliance and Governance
+
+DevSecOps can support compliance by making security controls:
+
+- Automated
+- Repeatable
+- Auditable
+- Traceable
+
+Examples of governance requirements may cover:
+
+- Access control
+- Vulnerability management
+- Change management
+- Logging
+- Data protection
+- Software supply chain
+- Security testing
+- Incident response
+
+Compliance requirements should be translated into actionable engineering controls.
+
+---
+
+# 50. Metrics and KPIs
+
+A DevSecOps program should measure outcomes, not simply scanner counts.
+
+Useful metrics include:
+
+## Mean Time to Remediate
 
 ```text
-CONTAINER SCANNING
-        │
-        ├── Base Image
-        │
-        ├── OS Packages
-        │
-        ├── Application Components
-        │
-        ├── Vulnerabilities
-        │
-        ├── Misconfigurations
-        │
-        ├── Secrets
-        │
-        └── Supply Chain
+Finding Created
+       │
+       ▼
+Finding Closed
+       │
+       ▼
+Remediation Time
 ```
 
-Recommended lifecycle:
+## Vulnerability Aging
+
+How long vulnerabilities remain open.
+
+## Security Defect Escape Rate
+
+Security issues discovered after release.
+
+## Scan Coverage
+
+Percentage of applications and repositories covered by security controls.
+
+## Pipeline Security Coverage
+
+Percentage of pipelines implementing required security checks.
+
+## False Positive Rate
+
+How many reported findings are not actual vulnerabilities.
+
+## Critical Vulnerability SLA
+
+Time required to remediate critical issues.
+
+---
+
+# 51. DevSecOps Maturity Model
+
+A simple maturity model:
+
+## Level 1 — Ad Hoc
 
 ```text
+Manual Security Reviews
+```
+
+Security is mostly reactive.
+
+## Level 2 — Basic Automation
+
+```text
+SAST
+SCA
+Secrets Scanning
+```
+
+Some checks are automated.
+
+## Level 3 — Integrated
+
+```text
+SAST
+SCA
+Secrets
+Container
+DAST
+```
+
+Security is integrated into CI/CD.
+
+## Level 4 — Risk-Based
+
+```text
+Security Gates
++
+Risk Prioritization
++
+Central Vulnerability Management
+```
+
+## Level 5 — Continuous Security
+
+```text
+Plan
+ ↓
+Code
+ ↓
 Build
+ ↓
+Test
+ ↓
+Release
+ ↓
+Operate
+ ↓
+Monitor
+ ↓
+Improve
+ └───────────────►
+```
+
+Security becomes a continuous engineering capability.
+
+---
+
+# 52. DevSecOps Anti-Patterns
+
+## Anti-Pattern 1: Security at the End
+
+```text
+Develop
   ↓
-Scan
-  ↓
-SBOM
-  ↓
-Security Gate
-  ↓
-Sign
-  ↓
-Registry
-  ↓
-Verify
+Build
   ↓
 Deploy
   ↓
-Monitor
+Security
 ```
 
----
-
-# 🔗 Related Knowledge
-
-* [`README.md`](README.md)
-* [`devsecops.md`](devsecops.md)
-* [`sast.md`](sast.md)
-* [`dast.md`](dast.md)
-* [`sca.md`](sca.md)
-* [`secrets-scanning.md`](secrets-scanning.md)
+This creates expensive late-stage findings.
 
 ---
 
-# 📖 Key Takeaway
-
-> **Container scanning is one layer of a broader container security strategy.**
-
-A secure container lifecycle should combine:
+## Anti-Pattern 2: Tool Explosion
 
 ```text
-Secure Dockerfile
-        +
-Trusted Base Image
-        +
-Minimal Image
-        +
-SCA
-        +
-Container Scanning
-        +
-Secrets Scanning
-        +
-SBOM
-        +
-Image Signing
-        +
-Security Gates
-        +
-Secure Runtime
-        +
-Continuous Monitoring
+10 Security Tools
+       │
+       ▼
+No Ownership
+       │
+       ▼
+Thousands of Findings
 ```
 
-The objective is not simply to produce a container that **passes a scanner**.
+More tools do not automatically mean better security.
 
-The objective is to build a container supply chain where:
+---
 
-> **Only trusted, understood, scanned, and appropriately governed artifacts progress toward production.**
+## Anti-Pattern 3: Ignore Findings
+
+```text
+Scanner
+  ↓
+1000 Findings
+  ↓
+Nobody Fixes Them
+```
+
+This creates alert fatigue.
+
+---
+
+## Anti-Pattern 4: Block Everything
+
+```text
+Any Finding
+     │
+     ▼
+Pipeline FAIL
+```
+
+This can cause developers to bypass security controls.
+
+---
+
+## Anti-Pattern 5: Security Team Only
+
+Security should not be isolated from engineering.
+
+---
+
+## Anti-Pattern 6: Production-Only Testing
+
+Security testing should happen throughout the lifecycle.
+
+---
+
+## Anti-Pattern 7: Secrets in CI/CD Logs
+
+Never expose credentials through build output.
+
+---
+
+# 53. Defense in Depth
+
+No single security control is sufficient.
+
+```text
+                    Security
+                       │
+       ┌───────────────┼────────────────┐
+       │               │                │
+       ▼               ▼                ▼
+     Code            Build            Runtime
+       │               │                │
+       ▼               ▼                ▼
+     SAST             SCA              WAF
+     Secrets          Container        Monitoring
+     Review           SBOM             Detection
+```
+
+If one control misses a vulnerability, another layer may detect or mitigate it.
+
+---
+
+# 54. DevSecOps Reference Architecture
+
+```text
+                              USERS
+                                │
+                                ▼
+                           CDN / WAF
+                                │
+                                ▼
+                         API / Gateway
+                                │
+                                ▼
+                         APPLICATION
+                                │
+             ┌──────────────────┼──────────────────┐
+             │                  │                  │
+             ▼                  ▼                  ▼
+          Services          Database          External APIs
+             │
+             ▼
+          Containers
+             │
+             ▼
+         Kubernetes
+             │
+             ▼
+          Cloud
+
+
+                  SOFTWARE SUPPLY CHAIN
+                           │
+                           ▼
+Developer ──► Git ──► CI/CD ──► Registry ──► Deploy
+                  │
+                  ├── SAST
+                  ├── SCA
+                  ├── Secrets
+                  ├── IaC
+                  ├── Container
+                  ├── SBOM
+                  ├── Signing
+                  └── DAST
+```
+
+---
+
+# 55. Complete DevSecOps Lifecycle
+
+```text
+                         PLAN
+                          │
+             ┌────────────┼────────────┐
+             │            │            │
+             ▼            ▼            ▼
+       Requirements   Threat Model   Risk
+             │            │            │
+             └────────────┼────────────┘
+                          ▼
+                         CODE
+                          │
+             ┌────────────┼────────────┐
+             │            │            │
+             ▼            ▼            ▼
+        Secure Code     SAST        Secrets
+                          │
+                          ▼
+                         BUILD
+                          │
+             ┌────────────┼────────────┐
+             │            │            │
+             ▼            ▼            ▼
+            SCA        Container      SBOM
+                       Scanning
+             │            │            │
+             └────────────┼────────────┘
+                          ▼
+                         TEST
+                          │
+             ┌────────────┼────────────┐
+             │            │            │
+             ▼            ▼            ▼
+           DAST      Security Tests  Pentest
+                          │
+                          ▼
+                        RELEASE
+                          │
+             ┌────────────┼────────────┐
+             │            │            │
+             ▼            ▼            ▼
+        Security Gate  Signing     Approval
+                          │
+                          ▼
+                       DEPLOY
+                          │
+                          ▼
+                       OPERATE
+                          │
+             ┌────────────┼────────────┐
+             │            │            │
+             ▼            ▼            ▼
+        Monitoring   Vulnerability   Incident
+                     Management      Response
+                          │
+                          ▼
+                       IMPROVE
+                          │
+                          └──────────► PLAN
+```
+
+---
+
+# 56. Real-World Example
+
+Consider an online banking application.
+
+```text
+Customer
+   │
+   ▼
+Mobile / Web Application
+   │
+   ▼
+API Gateway
+   │
+   ├── Authentication
+   ├── Account Service
+   ├── Payment Service
+   └── Notification Service
+   │
+   ▼
+Databases
+```
+
+A DevSecOps approach might include:
+
+```text
+Developer
+   │
+   ├── Secure Coding
+   ├── SAST
+   ├── Secrets Scanning
+   └── SCA
+   │
+   ▼
+Build
+   │
+   ├── Container Scan
+   ├── SBOM
+   └── Artifact Signing
+   │
+   ▼
+Test
+   │
+   ├── DAST
+   ├── API Security
+   └── Security Tests
+   │
+   ▼
+Staging
+   │
+   └── Penetration Testing
+   │
+   ▼
+Production
+   │
+   ├── WAF
+   ├── Monitoring
+   ├── SIEM
+   └── Incident Response
+```
+
+---
+
+# 57. How the Core Knowledge Documents Fit Together
+
+```text
+                         DEVSECOPS
+                             │
+        ┌────────────────────┼────────────────────┐
+        │                    │                    │
+        ▼                    ▼                    ▼
+       CODE                 BUILD                TEST
+        │                    │                    │
+        ▼                    ▼                    ▼
+      SAST                  SCA                  DAST
+        │                    │                    │
+        ├──────────────┐     ▼                    │
+        │              │ Container Scan           │
+        ▼              │                          │
+ Secrets Scanning      │                          │
+        │              │                          │
+        └──────────────┼──────────────────────────┘
+                       │
+                       ▼
+                 Security Gates
+                       │
+                       ▼
+                   Production
+```
+
+The individual knowledge documents explain each capability in detail.
+
+---
+
+# 58. DevSecOps vs AppSec
+
+These terms overlap but are not identical.
+
+## Application Security
+
+Application Security focuses primarily on protecting applications from security threats.
+
+## DevSecOps
+
+DevSecOps focuses on integrating security into the software delivery and operational lifecycle.
+
+```text
+AppSec
+ │
+ ├── Secure Coding
+ ├── SAST
+ ├── DAST
+ ├── SCA
+ └── Penetration Testing
+
+
+DevSecOps
+ │
+ ├── AppSec
+ ├── CI/CD Security
+ ├── Supply Chain Security
+ ├── Infrastructure Security
+ ├── Cloud Security
+ ├── Runtime Security
+ └── Continuous Feedback
+```
+
+DevSecOps therefore extends beyond traditional application security.
+
+---
+
+# 59. DevSecOps vs DevOps vs SecOps
+
+| Area | DevOps | SecOps | DevSecOps |
+|---|---|---|---|
+| Development | Strong | Limited | Strong |
+| Operations | Strong | Strong | Strong |
+| Security | Integrated operationally | Primary focus | Integrated throughout |
+| CI/CD | Strong | Limited | Strong |
+| Secure Coding | Limited | Limited | Strong |
+| SAST/SCA | Optional | Optional | Common |
+| Runtime Security | Strong | Strong | Strong |
+| Supply Chain | Growing | Moderate | Strong |
+| Developer Security | Moderate | Limited | Strong |
+| Security Automation | Strong | Strong | Strong |
+
+---
+
+# 60. DevSecOps Team Model
+
+A mature organization often uses a collaborative model:
+
+```text
+                    Security Team
+                         │
+              ┌──────────┼──────────┐
+              │          │          │
+              ▼          ▼          ▼
+           AppSec     CloudSec    SecOps
+              │          │          │
+              └──────────┼──────────┘
+                         │
+                         ▼
+                  Platform / DevOps
+                         │
+                         ▼
+                   Development
+```
+
+The goal is collaboration, not ownership silos.
+
+---
+
+# 61. Recommended Implementation Roadmap
+
+An organization should avoid trying to implement every control simultaneously.
+
+## Phase 1 — Foundation
+
+```text
+Source Control
+     │
+     ├── Branch Protection
+     ├── Code Review
+     └── Secrets Scanning
+```
+
+## Phase 2 — Code Security
+
+```text
+SAST
++
+SCA
+```
+
+## Phase 3 — Build Security
+
+```text
+Container Scanning
++
+SBOM
+```
+
+## Phase 4 — Runtime/Application Security
+
+```text
+DAST
++
+API Security
+```
+
+## Phase 5 — Supply Chain
+
+```text
+Signing
++
+Provenance
++
+Policy as Code
+```
+
+## Phase 6 — Continuous Security
+
+```text
+Monitoring
++
+Vulnerability Management
++
+Incident Response
+```
+
+---
+
+# 62. Practical First DevSecOps Pipeline
+
+For a team starting from zero:
+
+```text
+Git Push
+   │
+   ▼
+Secrets Scan
+   │
+   ▼
+SAST
+   │
+   ▼
+SCA
+   │
+   ▼
+Build
+   │
+   ▼
+Container Scan
+   │
+   ▼
+Deploy Test
+   │
+   ▼
+DAST
+   │
+   ▼
+Security Gate
+   │
+   ▼
+Deploy
+```
+
+This provides a strong foundation without creating excessive complexity.
+
+---
+
+# 63. Best Practices
+
+## People
+
+- Make security a shared responsibility.
+- Train developers.
+- Establish Security Champions.
+- Encourage security ownership.
+
+## Process
+
+- Integrate security into existing workflows.
+- Define security policies.
+- Establish vulnerability SLAs.
+- Create exception processes.
+- Perform threat modeling.
+
+## Technology
+
+- Automate repeatable controls.
+- Use multiple security layers.
+- Secure CI/CD.
+- Protect secrets.
+- Generate SBOMs.
+- Sign artifacts.
+- Monitor production.
+
+## Governance
+
+- Define risk thresholds.
+- Track vulnerabilities.
+- Measure remediation.
+- Audit security controls.
+- Review exceptions.
+
+---
+
+# 64. Common Interview Questions
+
+## Beginner
+
+### What is DevSecOps?
+
+DevSecOps is the integration of security practices into development, CI/CD, deployment, and operations so that security becomes a continuous and shared responsibility.
+
+### What does Shift Left mean?
+
+Shift Left means moving security activities earlier in the software lifecycle so issues can be identified closer to the time they are introduced.
+
+### Is DevSecOps just adding security tools to CI/CD?
+
+No. Tools are only one part. DevSecOps also includes culture, processes, secure design, governance, risk management, supply-chain security, and continuous feedback.
+
+### What are the main DevSecOps security controls?
+
+Common controls include SAST, SCA, secrets scanning, IaC scanning, container scanning, SBOM, DAST, security testing, artifact signing, and runtime monitoring.
+
+---
+
+## Intermediate
+
+### Why are SAST and DAST both required?
+
+SAST analyzes source code, while DAST tests a running application. They identify different classes of vulnerabilities.
+
+### Why is SCA important?
+
+Modern applications rely heavily on third-party dependencies. SCA identifies known vulnerabilities and risks in those components.
+
+### What is a security gate?
+
+A security gate is a CI/CD decision point where security findings are evaluated against defined policies before delivery continues.
+
+### Why is risk-based gating better than blocking every finding?
+
+Because vulnerabilities differ in severity, exploitability, exposure, business impact, and availability of remediation.
+
+---
+
+## Advanced
+
+### How would you implement DevSecOps in an organization?
+
+A strong answer should cover:
+
+1. Understand the existing SDLC and CI/CD.
+2. Establish security requirements and threat modeling.
+3. Protect source control and secrets.
+4. Add SAST and SCA.
+5. Add IaC and container scanning.
+6. Introduce SBOM and artifact security.
+7. Add DAST to test environments.
+8. Establish risk-based gates.
+9. Implement vulnerability management.
+10. Add runtime monitoring and incident feedback.
+11. Measure outcomes.
+12. Continuously improve.
+
+### What is the biggest challenge in DevSecOps?
+
+Usually not the technology.
+
+Common challenges include:
+
+- Developer adoption
+- Tool overload
+- False positives
+- Poor ownership
+- Inadequate security knowledge
+- Slow remediation
+- Weak CI/CD security
+- Lack of executive support
+
+### How do you prevent DevSecOps from slowing developers down?
+
+Use:
+
+- Fast feedback
+- Risk-based gates
+- Developer-friendly reports
+- Automated remediation where possible
+- Baseline management
+- Clear exception processes
+- Appropriate severity thresholds
+
+---
+
+# 65. DevSecOps Metrics
+
+A useful dashboard might track:
+
+```text
+Repositories Covered
+        │
+        ▼
+Security Scan Coverage
+        │
+        ▼
+Findings
+        │
+        ▼
+Critical / High Findings
+        │
+        ▼
+Mean Time to Remediate
+        │
+        ▼
+Security Defect Escape Rate
+        │
+        ▼
+Risk Reduction
+```
+
+The ultimate objective is not:
+
+> "How many scans did we run?"
+
+It is:
+
+> **"How effectively are we reducing security risk while maintaining delivery velocity?"**
+
+---
+
+# 66. Final DevSecOps Mental Model
+
+Think about DevSecOps as five connected layers:
+
+```text
+┌───────────────────────────────────────────────┐
+│                    PEOPLE                     │
+│ Developers • Security • Operations • Champions│
+└───────────────────────┬───────────────────────┘
+                        │
+┌───────────────────────▼───────────────────────┐
+│                    PROCESS                    │
+│ SDLC • Risk • Governance • Remediation        │
+└───────────────────────┬───────────────────────┘
+                        │
+┌───────────────────────▼───────────────────────┐
+│                  AUTOMATION                   │
+│ CI/CD • Security Gates • Policy as Code       │
+└───────────────────────┬───────────────────────┘
+                        │
+┌───────────────────────▼───────────────────────┐
+│                  SECURITY                     │
+│ SAST • SCA • DAST • Secrets • Containers      │
+└───────────────────────┬───────────────────────┘
+                        │
+┌───────────────────────▼───────────────────────┐
+│                  OPERATIONS                   │
+│ Monitoring • Detection • Response • Learning  │
+└───────────────────────────────────────────────┘
+```
+
+---
+
+# 67. Quick Reference
+
+```text
+DEVSECOPS
+│
+├── PLAN
+│   ├── Security Requirements
+│   ├── Threat Modeling
+│   └── Risk Assessment
+│
+├── CODE
+│   ├── Secure Coding
+│   ├── Code Review
+│   ├── SAST
+│   └── Secrets Scanning
+│
+├── BUILD
+│   ├── SCA
+│   ├── Dependency Scanning
+│   ├── SBOM
+│   └── Container Scanning
+│
+├── TEST
+│   ├── DAST
+│   ├── API Security
+│   ├── Security Tests
+│   └── Penetration Testing
+│
+├── RELEASE
+│   ├── Security Gates
+│   ├── Artifact Signing
+│   ├── Provenance
+│   └── Policy
+│
+├── DEPLOY
+│   ├── Least Privilege
+│   ├── Admission Controls
+│   └── Secure Configuration
+│
+└── OPERATE
+    ├── Monitoring
+    ├── Vulnerability Management
+    ├── Incident Response
+    └── Continuous Improvement
+```
+
+---
+
+# 68. Key Takeaway
+
+> **DevSecOps is not a security tool, a pipeline stage, or a security team's responsibility. It is an engineering approach for continuously managing security throughout the software lifecycle.**
+
+The core model is:
+
+```text
+PLAN
+  ↓
+DESIGN SECURELY
+  ↓
+CODE SECURELY
+  ↓
+SCAN
+  ↓
+BUILD SECURELY
+  ↓
+TEST
+  ↓
+VERIFY
+  ↓
+RELEASE
+  ↓
+DEPLOY
+  ↓
+MONITOR
+  ↓
+RESPOND
+  ↓
+LEARN
+  ↓
+IMPROVE
+  └──────────────────► PLAN
+```
+
+The strongest DevSecOps programs combine:
+
+```text
+People
+  +
+Secure Process
+  +
+Automation
+  +
+Security Engineering
+  +
+Risk Management
+  +
+Continuous Feedback
+```
+
+The goal is not to make security a blocker.
+
+> **The goal is to make secure software the natural outcome of the software delivery process.**
+
+---
+
+# 69. Related Knowledge
+
+- [`README.md`](README.md)
+- [`sast.md`](sast.md)
+- [`dast.md`](dast.md)
+- [`sca.md`](sca.md)
+- [`container-scanning.md`](container-scanning.md)
+- [`secrets-scanning.md`](secrets-scanning.md)
