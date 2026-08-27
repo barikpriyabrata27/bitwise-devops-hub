@@ -73,6 +73,13 @@
                 <option value="Advanced">Advanced</option>
               </select>
             </label>
+            <label>Question type
+              <select id="type-select">
+                <option value="All">Concept + scenario</option>
+                <option value="scenario">Real-world scenarios</option>
+                <option value="concept">Concept checks</option>
+              </select>
+            </label>
           </div>
           <div id="quick-filter-list" class="quick-filter-list" aria-label="Quick topic filters"></div>
           <div class="setup-footer">
@@ -90,7 +97,7 @@
           <span id="quiz-mode-label" class="mono-label">PRACTICE</span>
         </div>
         <div class="question-layout">
-          <aside class="question-aside"><span id="question-number" class="huge-number">01</span><span id="question-category" class="category-tag">Kubernetes</span><span id="question-difficulty" class="difficulty-tag">Beginner</span></aside>
+          <aside class="question-aside"><span id="question-number" class="huge-number">01</span><span id="question-category" class="category-tag">Kubernetes</span><span id="question-difficulty" class="difficulty-tag">Beginner</span><span id="question-type" class="scenario-tag hidden">Scenario</span></aside>
           <article class="question-card">
             <p id="question-kicker" class="eyebrow">Question</p>
             <h1 id="question-title">Loading question...</h1>

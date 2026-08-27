@@ -414,7 +414,8 @@ const state = {
   selectedSet: [],
   filters: {
     category: "All",
-    difficulty: "All"
+    difficulty: "All",
+    type: "All"
   }
 };
 
@@ -513,6 +514,10 @@ function filteredBank() {
       (
         state.filters.difficulty === "All" ||
         question.difficulty === state.filters.difficulty
+      ) &&
+      (
+        state.filters.type === "All" ||
+        (question.type || "concept") === state.filters.type
       )
   );
 }
@@ -915,6 +920,12 @@ function renderQuestion() {
 
   $("#question-difficulty").textContent =
     question.difficulty;
+
+
+  $("#question-type").classList.toggle(
+    "hidden",
+    question.type !== "scenario"
+  );
 
 
   $("#question-title").textContent =
@@ -1600,6 +1611,17 @@ document.addEventListener(
         (event) => {
 
           state.filters.difficulty =
+            event.target.value;
+        }
+      );
+
+
+    $("#type-select")
+      .addEventListener(
+        "change",
+        (event) => {
+
+          state.filters.type =
             event.target.value;
         }
       );
